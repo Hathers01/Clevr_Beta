@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - Student Dashboard</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles (Diambil dari Pricing.html) --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+
+        /* --- 2. Custom Colors Utilities --- */
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .bg-clevr-dark { background-color: var(--clevr-dark) !important; }
+        .bg-clevr-orange { background-color: var(--clevr-orange) !important; }
+        
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+        .text-clevr-orange { color: var(--clevr-orange) !important; }
+
+        /* --- 3. Component Styling --- */
+        
+        /* Navbar Styling */
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            transition: opacity 0.2s;
+        }
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+        
+        /* Profile Section in Navbar */
+        .profile-section img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        .profile-text {
+            line-height: 1.2;
+            color: white;
+        }
+
+        /* Search Bar Styling */
+        .search-container {
+            position: relative;
+        }
+        .search-input {
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            padding: 1rem 1rem 1rem 3rem; /* Left padding for icon */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            font-size: 1rem;
+        }
+        .search-input:focus {
+            border-color: var(--clevr-purple);
+            box-shadow: 0 0 0 0.25rem rgba(130, 123, 255, 0.25);
+        }
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        /* Upcoming Class Card */
+        .upcoming-card {
+            background-color: var(--clevr-purple);
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(130, 123, 255, 0.3);
+            border: none;
+        }
+
+        /* Tutor Card Styling */
+        .tutor-card {
+            border-radius: 1.5rem; /* Lebih bulat seperti di gambar */
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        .tutor-card:hover {
+            transform: translateY(-5px);
+        }
+        .tutor-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 1rem;
+            object-fit: cover;
+            background-color: #f3f4f6; /* Placeholder color */
+        }
+        
+        /* Button Animation (from pricing.html) */
+        .btn-animate {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .btn-animate:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Icon kecil clover hijau */
+        .clover-icon {
+            color: #4ade80; /* Green */
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
+                CLEVR
+            </a>
+
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href=" ">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="findtutor.html">Find Tutor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="myclasses.html">My Classes</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center profile-section cursor-pointer">
+                    <img src="https://ui-avatars.com/api/?name=Gita+Aulia&background=0D8ABC&color=fff" alt="Profile" class="rounded-circle me-3 shadow-sm">
+                    <div class="profile-text d-none d-md-block">
+                        <div class="fw-bold text-white">Gita Aulia</div>
+                        <div class="small text-white-50">Student</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        
+        <div class="mb-4">
+            <h1 class="fw-bold text-clevr-dark">Welcome, Little Star!</h1>
+        </div>
+
+        <div class="mb-5 search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" class="form-control search-input" placeholder="Search for your favorite Tutor or Lesson...">
+        </div>
+
+        <div class="mb-5">
+            <h4 class="fw-bold text-clevr-dark mb-3">Your Upcoming Class Schedule</h4>
+            
+            <div class="card upcoming-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+                <div class="mb-3 mb-md-0">
+                    <div class="small text-white-50 fw-bold mb-1 text-uppercase">Next Class:</div>
+                    <h2 class="fw-bold mb-1">Mathematics - Fractions</h2>
+                    <p class="mb-0 fs-5 opacity-75">Today, 15:00 WIB with Tutor Athalla</p>
+                </div>
+                
+                <div>
+                    <button class="btn bg-clevr-dark text-white fw-bold px-5 py-3 rounded-3 btn-animate border-0">
+                        Start Class:
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h4 class="fw-bold text-clevr-dark mb-3">Featured Tutors (Quick Booking)</h4>
+            
+            <div class="row g-4">
+                
+                <div class="col-md-6">
+                    <div class="card tutor-card p-3">
+                        <div class="card-body d-flex align-items-start">
+                            <div class="me-3 flex-shrink-0">
+                                <img src="foto/tutor2.jpg" alt="Tutor" class="tutor-img shadow-sm">
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="fw-bold text-clevr-dark mb-1">Marvelius Harven</h5>
+                                </div>
+                                <p class="small text-secondary fw-bold mb-2">
+                                    Indonesian Language Specialist<br>(Elementary)
+                                    <span class="text-warning ms-1"><i class="fa-solid fa-star"></i> 4.9</span>
+                                </p>
+                                
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fa-solid fa-clover clover-icon me-2"></i>
+                                    <span class="fw-bold text-clevr-dark small">7 Clover / Session</span>
+                                </div>
+
+                                <button class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
+                                    View & Book
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card tutor-card p-3">
+                        <div class="card-body d-flex align-items-start">
+                            <div class="me-3 flex-shrink-0">
+                                <img src="foto/tutor2.jpg" alt="Tutor" class="tutor-img shadow-sm">
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="fw-bold text-clevr-dark mb-1">Marvelius Harven</h5>
+                                </div>
+                                <p class="small text-secondary fw-bold mb-2">
+                                    Indonesian Language Specialist<br>(Elementary)
+                                    <span class="text-warning ms-1"><i class="fa-solid fa-star"></i> 4.9</span>
+                                </p>
+                                
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fa-solid fa-clover clover-icon me-2"></i>
+                                    <span class="fw-bold text-clevr-dark small">7 Clover / Session</span>
+                                </div>
+
+                                <button class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
+                                    View & Book
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
