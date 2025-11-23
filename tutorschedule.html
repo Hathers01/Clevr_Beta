@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - My Availability Schedule</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles (Diambil dari home_tutor.html) --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+            --clevr-bg-light: #f3f4f6;
+            --calendar-booked-bg: #F4C7D7; /* Pink untuk booked */
+            --calendar-booked-text: #8B1A47;
+            --calendar-slot-bg: #EEF2FF;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #f9fafb;
+        }
+
+        /* --- Utilities --- */
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        
+        /* --- Navbar Styling --- */
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            transition: opacity 0.2s;
+            text-decoration: none; /* Pastikan tidak ada underline default */
+        }
+        .nav-link:hover {
+            opacity: 0.8;
+            text-decoration: none; /* Hilangkan underline saat hover */
+        }
+        .nav-link.active {
+            opacity: 1;
+            font-weight: 700; /* Hanya pertebal font, tanpa underline */
+        }
+        
+        .profile-section img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        .profile-text {
+            line-height: 1.2;
+            color: white;
+        }
+
+        /* --- MAIN CARD STYLING --- */
+        .main-card {
+            background: white;
+            border-radius: 1.5rem;
+            border: none;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-bottom: 2.5rem;
+        }
+
+        /* --- Availability Section Styles --- */
+        .sub-card {
+            background-color: var(--clevr-bg-light);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .sub-card-title {
+            color: var(--clevr-dark);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-clevr-action {
+            background-color: var(--clevr-orange);
+            color: white;
+            font-weight: 700;
+            width: 100%;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(253, 167, 0, 0.2);
+        }
+
+        .btn-clevr-action:hover {
+            background-color: #e59600;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* --- Calendar Styles --- */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .calendar-nav-btn {
+            background: none;
+            border: none;
+            color: var(--clevr-dark);
+            font-weight: 700;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+        }
+        .calendar-nav-btn:hover { opacity: 0.7; }
+
+        .table-calendar {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table-calendar thead th {
+            background-color: var(--clevr-dark);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: none;
+        }
+
+        .table-calendar td {
+            height: 100px; /* Tinggi kotak tanggal */
+            width: 14.28%; /* 7 hari */
+            vertical-align: top;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            position: relative;
+            background-color: white;
+            transition: background 0.2s;
+        }
+        
+        .table-calendar td:hover {
+            background-color: #fafafa;
+        }
+
+        .date-number {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* Status Pills inside Calendar */
+        .status-pill {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-top: auto;
+        }
+
+        .status-booked {
+            background-color: var(--calendar-booked-bg); /* Pink */
+            color: var(--calendar-booked-text);
+        }
+
+        .status-slots {
+            background-color: var(--calendar-slot-bg); /* Light Blue */
+            color: var(--clevr-dark);
+        }
+
+        /* --- Toast (Copied from home) --- */
+        .custom-toast {
+            visibility: hidden;
+            min-width: 300px;
+            background-color: var(--clevr-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px 24px;
+            position: fixed;
+            z-index: 1050;
+            left: 50%;
+            top: -100px;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .custom-toast.show {
+            visibility: visible;
+            opacity: 1;
+            top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .table-calendar td { height: 70px; font-size: 0.8rem; }
+            .status-pill { font-size: 0.65rem; padding: 2px 4px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="actionToast" class="custom-toast">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-success-custom fs-5" style="color: #4ade80;"></i>
+        <span id="toastMessage">Changes Saved!</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="#">
+                CLEVR
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Updated href to home_tutor.html for navigation simulation -->
+                    <li class="nav-item"><a class="nav-link" href="home_tutor.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href=" ">My Schedule</a></li>
+                    <li class="nav-item"><a class="nav-link" href="earnings.html">Earnings & History</a></li>
+                </ul>
+                <a href="profiltutor.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                    <img src="foto/tutor3.jpeg" alt="Profile" class="rounded-circle me-3 shadow-sm">
+                    <div class="profile-text d-none d-md-block">
+                        <div class="fw-bold text-white">Gita Aulia</div>
+                        <div class="small text-white-50">Tutor</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        
+        <!-- Page Header -->
+        <div class="mb-4">
+            <h2 class="fw-bold text-clevr-dark">My Availability Schedule</h2>
+            <p class="text-secondary fs-6" style="max-width: 700px;">
+                Manage your teaching hours. Students can book classes according to the active slots here.
+            </p>
+        </div>
+
+        <!-- 1. Set Availability Status Section -->
+        <div class="main-card">
+            <h4 class="fw-bold text-clevr-dark mb-4">Set Availability Status</h4>
+            
+            <div class="row g-4">
+                <!-- Daily Schedule Card -->
+                <div class="col-md-6">
+                    <div class="sub-card">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="flex-grow-1">
+                                <h5 class="sub-card-title">Daily Schedule</h5>
+                                <p class="text-secondary small mb-2">Activate/Deactivate specific days.</p>
+                            </div>
+                        </div>
+                        <button onclick="showNotification('Days Managed')" class="btn btn-clevr-action">
+                            Manage Days
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Time Slots Card -->
+                <div class="col-md-6">
+                    <div class="sub-card">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="flex-grow-1">
+                                <h5 class="sub-card-title">Time Slots & Price</h5>
+                                <p class="text-secondary small mb-2">Set teaching hours & Clover cost.</p>
+                            </div>
+                        </div>
+                        <button onclick="showNotification('Slots Edited')" class="btn btn-clevr-action">
+                            Edit Slots
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Active Schedule Calendar Section -->
+        <div>
+            <h4 class="fw-bold text-clevr-dark mb-3">Active Schedule This Month</h4>
+
+            <div class="main-card p-0 overflow-hidden">
+                <!-- Calendar Controls -->
+                <div class="p-4 border-bottom">
+                    <div class="calendar-header mb-0">
+                        <button class="calendar-nav-btn"><i class="fa-solid fa-arrow-left me-2"></i> Previous</button>
+                        <h4 class="fw-bold text-clevr-dark mb-0">November 2025</h4>
+                        <button class="calendar-nav-btn">Next <i class="fa-solid fa-arrow-right ms-2"></i></button>
+                    </div>
+                </div>
+
+                <!-- Calendar Table -->
+                <div class="table-responsive">
+                    <table class="table-calendar mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sun</th>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Week 1 -->
+                            <tr>
+                                <td></td> <!-- Oct 26 -->
+                                <td></td> <!-- Oct 27 -->
+                                <td></td> <!-- Oct 28 -->
+                                <td></td> <!-- Oct 29 -->
+                                <td></td> <!-- Oct 30 -->
+                                <td><span class="date-number">1</span></td>
+                                <td><span class="date-number">2</span></td>
+                            </tr>
+                            <!-- Week 2 -->
+                            <tr>
+                                <td><span class="date-number">3</span></td>
+                                <td>
+                                    <span class="date-number">4</span>
+                                    <span class="status-pill status-slots">4 Slots</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">5</span>
+                                    <span class="status-pill status-slots">2 Slots</span>
+                                </td>
+                                <td style="background-color: #FFF0F6;">
+                                    <span class="date-number">6</span>
+                                    <span class="status-pill status-booked">BOOKED (2)</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">7</span>
+                                    <span class="status-pill status-slots">5 Slots</span>
+                                </td>
+                                <td><span class="date-number">8</span></td>
+                                <td><span class="date-number">9</span></td>
+                            </tr>
+                            <!-- Week 3 -->
+                            <tr>
+                                <td><span class="date-number">10</span></td>
+                                <td style="background-color: #FFF0F6;">
+                                    <span class="date-number">11</span>
+                                    <span class="status-pill status-booked">BOOKED (1)</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">12</span>
+                                    <span class="status-pill status-slots">6 Slots</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">13</span>
+                                    <span class="status-pill status-slots">3 Slots</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">14</span>
+                                    <span class="status-pill status-slots">8 Slots</span>
+                                </td>
+                                <td><span class="date-number">15</span></td>
+                                <td><span class="date-number">16</span></td>
+                            </tr>
+                            <!-- Week 4 -->
+                            <tr>
+                                <td><span class="date-number">17</span></td>
+                                <td>
+                                    <span class="date-number">18</span>
+                                    <span class="status-pill status-slots">4 Slots</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">19</span>
+                                    <span class="status-pill status-slots">1 Slot</span>
+                                </td>
+                                <td style="background-color: #FFF0F6;">
+                                    <span class="date-number">20</span>
+                                    <span class="status-pill status-booked">BOOKED (3)</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">21</span>
+                                    <span class="status-pill status-slots">7 Slots</span>
+                                </td>
+                                <td><span class="date-number">22</span></td>
+                                <td><span class="date-number">23</span></td>
+                            </tr>
+                            <!-- Week 5 -->
+                            <tr>
+                                <td><span class="date-number">24</span></td>
+                                <td>
+                                    <span class="date-number">25</span>
+                                    <span class="status-pill status-slots">2 Slots</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">26</span>
+                                    <span class="status-pill status-slots">4 Slots</span>
+                                </td>
+                                <td><span class="date-number">27</span></td>
+                                <td><span class="date-number">28</span></td>
+                                <td><span class="date-number">29</span></td>
+                                <td><span class="date-number">30</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script Notifikasi (Sama seperti home) -->
+    <script>
+        let toastTimeout;
+
+        function showNotification(message) {
+            const toast = document.getElementById("actionToast");
+            const msgElement = document.getElementById("toastMessage");
+            
+            if(message) msgElement.innerText = message;
+
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+
+            toast.classList.add("show");
+
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>

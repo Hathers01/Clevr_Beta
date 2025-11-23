@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - Earnings & History</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+            --clevr-pink: #F48FB1; 
+            --clevr-pink-hover: #f06292;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #f9fafb;
+        }
+
+        /* --- 2. Utilities --- */
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .bg-clevr-dark { background-color: var(--clevr-dark) !important; }
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+
+        /* --- 3. Navbar Styling --- */
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            transition: opacity 0.2s;
+            text-decoration: none !important; /* Memastikan tidak ada underline sama sekali */
+        }
+        .nav-link:hover { 
+            opacity: 0.8; 
+            text-decoration: none; /* Tidak ada underline saat hover */
+        }
+        .nav-link.active { 
+            font-weight: 800; /* Lebih tebal untuk menandakan aktif */
+            opacity: 1;
+            text-decoration: none; /* Hilangkan underline pada state aktif */
+        }
+        
+        .profile-section img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        .profile-text { line-height: 1.2; color: white; }
+
+        /* --- 4. Cards Styling (Earnings Specific) --- */
+        
+        /* Balance Card (Kotak Saldo) */
+        .balance-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .balance-label {
+            font-weight: 600;
+            color: #011A5A;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--clevr-dark);
+        }
+
+        /* Tombol Withdraw (Pink) */
+        .btn-withdraw {
+            background-color: var(--clevr-pink);
+            color: #011A5A;
+            font-weight: 700;
+            padding: 12px 30px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(244, 143, 177, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-withdraw:hover {
+            background-color: var(--clevr-pink-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(244, 143, 177, 0.4);
+            color: #011A5A;
+        }
+
+        /* History Item Card (Daftar Transaksi) */
+        .history-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .history-title {
+            font-weight: 700;
+            color: var(--clevr-dark);
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .history-subtitle {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .history-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4ade80; /* Hijau Clover */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- 5. Notification Toast --- */
+        .custom-toast {
+            visibility: hidden;
+            min-width: 320px;
+            background-color: var(--clevr-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px 24px;
+            position: fixed;
+            z-index: 1050;
+            left: 50%;
+            top: -100px;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .custom-toast.show { visibility: visible; opacity: 1; top: 40px; }
+
+        @media (max-width: 768px) {
+            .balance-card { flex-direction: column; align-items: flex-start; }
+            .btn-withdraw { width: 100%; }
+            .balance-value { font-size: 2rem; }
+            .history-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .history-amount { align-self: flex-end; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast Container -->
+    <div id="actionToast" class="custom-toast">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-success fs-5"></i>
+        <span id="toastMessage">Action Successful</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="#">
+                CLEVR
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="home_tutor.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tutorschedule.html">My Schedule</a></li>
+                    <!-- Active Link -->
+                    <li class="nav-item"><a class="nav-link active" href=" ">Earnings & History</a></li>
+                </ul>
+                <a href="profiltutor.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                    <img src="foto/tutor3.jpeg" alt="Profile" class="rounded-circle me-3 shadow-sm">
+                    <div class="profile-text d-none d-md-block">
+                        <div class="fw-bold text-white">Gita Aulia</div>
+                        <div class="small text-white-50">Tutor</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        
+        <!-- Header -->
+        <div class="mb-4">
+            <h2 class="fw-bold text-clevr-dark mb-1">Class & Earnings History</h2>
+            <p class="text-secondary fs-5">Monitor your income from completed classes.</p>
+        </div>
+
+        <!-- 1. Balance Section -->
+        <div class="balance-card mb-5">
+            <div>
+                <div class="balance-label">Ready-to-Withdraw Balance</div>
+                <div class="balance-value">Rp 550.000</div>
+            </div>
+            <div>
+                <button onclick="showNotification('Withdrawal Request Sent!', 'money')" class="btn-withdraw">
+                    Withdraw Funds
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. History Section -->
+        <div class="mb-3">
+            <h5 class="fw-bold text-clevr-dark mb-4">Clover Transaction History (Completed Classes)</h5>
+
+            <!-- Item 1 -->
+            <div class="history-card">
+                <div>
+                    <div class="history-title">Class: Mathematics - Fractions</div>
+                    <div class="history-subtitle">Student: Little Star | 20 Oct 2025</div>
+                </div>
+                <div class="history-amount">
+                    +10 <i class="fa-solid fa-clover"></i>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="history-card">
+                <div>
+                    <div class="history-title">Class: Mathematics - Fractions</div>
+                    <div class="history-subtitle">Student: Little Star | 20 Oct 2025</div>
+                </div>
+                <div class="history-amount">
+                    +10 <i class="fa-solid fa-clover"></i>
+                </div>
+            </div>
+            
+            <!-- Item 3 -->
+            <div class="history-card">
+                <div>
+                    <div class="history-title">Class: Basic English - Introduction</div>
+                    <div class="history-subtitle">Student: Radit | 18 Oct 2025</div>
+                </div>
+                <div class="history-amount">
+                    +10 <i class="fa-solid fa-clover"></i>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Notification Logic -->
+    <script>
+        let toastTimeout;
+
+        function showNotification(message, type = 'success') {
+            const toast = document.getElementById("actionToast");
+            const msgElement = document.getElementById("toastMessage");
+            const iconElement = document.getElementById("toastIcon");
+
+            if(message) msgElement.innerText = message;
+
+            // Reset base classes
+            iconElement.className = "fa-solid fs-5";
+            
+            if (type === 'money') {
+                iconElement.classList.add('fa-money-bill-wave', 'text-warning');
+            } else {
+                iconElement.classList.add('fa-circle-check', 'text-success');
+            }
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+
+            toast.classList.add("show");
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
