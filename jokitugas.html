@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - Assignment Helper Center</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- CDN links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles (Same as Home) --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+            --clevr-light: #F3F4F6;
+            --clevr-green: #4ade80;
+            --clevr-pink: #F3A6CE;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #f9fafb;
+        }
+
+        /* --- 2. Navbar Styling --- */
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            transition: opacity 0.2s;
+        }
+        .nav-link:hover { opacity: 0.8; }
+        
+        .profile-section img {
+            width: 45px; height: 45px; object-fit: cover; border: 2px solid white;
+        }
+        .profile-text { line-height: 1.2; color: white; }
+
+        /* --- 3. Joki Form Styling (Adapted from Feedback Section Help.html) --- */
+        
+        .hero-title {
+            color: var(--clevr-dark);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #f3f4f6;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-label {
+            color: var(--clevr-dark);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Custom Form Control */
+        .form-control-custom, .form-select-custom {
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            color: #4b5563;
+            width: 100%;
+            background-color: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control-custom:focus, .form-select-custom:focus {
+            border-color: var(--clevr-purple);
+            box-shadow: 0 0 0 4px rgba(130, 123, 255, 0.15);
+            outline: none;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background-color: var(--clevr-purple);
+            color: white;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.3s ease;
+            border: none;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: #6f68fc;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(130, 123, 255, 0.4);
+        }
+
+        /* Icon kecil clover hijau */
+        .clover-icon {
+            color: #4ade80; /* Green */
+        }
+
+        /* Notification Toast */
+        .custom-toast {
+            visibility: hidden; min-width: 300px; background-color: var(--clevr-dark);
+            color: #fff; text-align: center; border-radius: 50px; padding: 16px 24px;
+            position: fixed; z-index: 1050; left: 50%; top: -100px; transform: translateX(-50%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); opacity: 0; transition: all 0.5s;
+            font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .custom-toast.show { visibility: visible; opacity: 1; top: 40px; }
+        .text-success-custom { color: #4ade80 !important; }
+        
+        /* New Style for Wallet Pill (Same as Home) */
+        .clover-icon { 
+            color: #4ade80; 
+        }
+
+        .btn-animate {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .btn-animate:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="custom-toast">
+        <i class="fa-solid fa-circle-check text-success-custom"></i>
+        <span id="toastMessage">Assignment uploaded successfully!</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">CLEVR</a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <!-- Active Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" style="opacity:1;" href="jokitugas.html">Assignment Helper</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="findtutor.html">Find Tutor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="myclasses.html">My Classes</a></li>
+                </ul>
+
+                <!-- Top Up Wallet Section (NEW) -->
+                <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 me-4 shadow-sm" style="height: 45px;">
+                    <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
+                    <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    <!-- UPDATE: text-white diganti jadi text-clevr-dark -->
+                    <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Profile Link -->
+                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none">
+                    <img src="foto/user1.png" alt="Profile" class="rounded-circle me-3 shadow-sm">
+                    <div class="profile-text d-none d-md-block">
+                        <div class="fw-bold text-white">Hayley Williams</div>
+                        <div class="small text-white-50">Student</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        
+        <!-- Hero Section (Centered Title) -->
+        <div class="text-center mx-auto mb-5" style="max-width: 768px;">
+            <h2 class="hero-title">Need Assignment Help?</h2>
+            <p class="hero-subtitle">
+                Fill out the form below to upload your assignment. Other CLEVR friends are ready to help you finish your tasks quickly!
+            </p>
+        </div>
+
+        <!-- Upload Form Card -->
+        <div class="upload-card p-4 p-md-5">
+            <form id="uploadForm" onsubmit="handleUpload(event)">
+                
+                <!-- Assignment Title -->
+                <div class="mb-3">
+                    <label for="judulTugas" class="form-label">Assignment Title</label>
+                    <input type="text" class="form-control-custom" id="judulTugas" placeholder="Example: Math Homework Page 50" required>
+                </div>
+
+                <!-- Subject -->
+                <div class="mb-3">
+                    <label for="mapel" class="form-label">Subject</label>
+                    <select class="form-select-custom" id="mapel">
+                        <option selected disabled>Select Subject</option>
+                        <option value="math">Mathematics</option>
+                        <option value="eng">English</option>
+                        <option value="sci">Science</option>
+                        <option value="hist">History</option>
+                        <option value="other">Others</option>
+                    </select>
+                </div>
+
+                <!-- Deadline -->
+                <div class="mb-3">
+                    <label for="deadline" class="form-label">Submission Deadline</label>
+                    <input type="datetime-local" class="form-control-custom" id="deadline" required>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="deskripsi" class="form-label">Description & Instructions</label>
+                    <textarea class="form-control-custom" id="deskripsi" rows="4" placeholder="Explain your assignment details here..."></textarea>
+                </div>
+
+                <!-- Reward -->
+                <div class="mb-4">
+                    <label for="reward" class="form-label">Reward (Clovr)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0" style="border-radius: 8px 0 0 8px; border-color: #dee2e6;">
+                            <i class="fa-solid fa-clover text-success"></i>
+                        </span>
+                        <input type="number" class="form-control-custom" id="reward" placeholder="10" style="border-radius: 0 8px 8px 0; border-left: 0;">
+                    </div>
+                    <div class="form-text text-secondary small mt-2">
+                        <i class="fa-solid fa-circle-info me-1"></i> Minimum 10 Clovr to attract helpers.
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-paper-plane me-2"></i> Upload Assignment Now
+                </button>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- CDN JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to show toast notification
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            const msg = document.getElementById("toastMessage");
+            msg.innerText = message;
+            toast.className = "custom-toast show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        // Handle Upload Form
+        function handleUpload(e) {
+            e.preventDefault();
+            
+            // Show Success
+            showToast("Assignment uploaded successfully! Waiting for help...");
+            
+            // Reset Form
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

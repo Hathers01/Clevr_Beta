@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - My Profile</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap 5 -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+            --clevr-light: #F3F4F6;
+            --clevr-green: #4ade80;
+            --clevr-pink: #F3A6CE;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+
+        /* --- 2. Custom Colors Utilities --- */
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .bg-clevr-dark { background-color: var(--clevr-dark) !important; }
+        .bg-clevr-orange { background-color: var(--clevr-orange) !important; }
+        .bg-clevr-light { background-color: var(--clevr-light) !important; }
+        .bg-clevr-pink { background-color: var(--clevr-pink) !important; }
+        
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+        .text-clevr-orange { color: var(--clevr-orange) !important; }
+        .text-clevr-green { color: var(--clevr-green) !important; }
+
+        /* --- 3. Navbar Styles --- */
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            transition: opacity 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            opacity: 1;
+        }
+        
+        .profile-nav-img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        /* --- 4. Profile Specific Components --- */
+        
+        .card-custom {
+            border: none;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            background: white;
+            overflow: hidden;
+        }
+
+        /* Profile Sidebar Card */
+        .profile-header-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        .profile-big-img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border: 4px solid var(--clevr-purple);
+            padding: 3px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        .level-badge {
+            background-color: var(--clevr-dark);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            align-items: flex-start; 
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+            color: white;
+            border: none;
+            position: relative;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-icon-bg {
+            background-color: rgba(255,255,255,0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Top Up Button in Stat Card */
+        .btn-topup {
+            background-color: white;
+            color: var(--clevr-orange);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            margin-top: 0.5rem;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        .btn-topup:hover {
+            background-color: #fff8e1; 
+            transform: scale(1.05);
+        }
+
+        /* Badges Section */
+        .badge-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 1rem;
+            background-color: var(--clevr-light);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .badge-item:hover {
+            background-color: #e0e7ff;
+        }
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .badge-locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        /* Class List Item */
+        .class-list-item {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s;
+        }
+        .class-list-item:hover {
+            background-color: #f9fafb;
+        }
+        .class-list-item:last-child {
+            border-bottom: none;
+        }
+        .subject-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Buttons */
+        .btn-animate {
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-animate:hover {
+            transform: scale(1.02);
+        }
+        .btn-edit {
+            background-color: #f3f4f6;
+            color: var(--clevr-dark);
+            font-weight: 600;
+            border: none;
+        }
+        .btn-edit:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* Icon kecil clover hijau */
+        .clover-icon {
+            color: #4ade80; /* Green */
+        }
+        
+        /* Toast Notification */
+        .custom-toast {
+            visibility: hidden;
+            min-width: 300px;
+            background-color: var(--clevr-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px 24px;
+            position: fixed;
+            z-index: 1060; 
+            left: 50%;
+            top: -100px;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .custom-toast.show {
+            visibility: visible;
+            opacity: 1;
+            top: 40px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="profileToast" class="custom-toast">
+        <i class="fa-solid fa-check-circle text-clevr-green"></i>
+        <span id="toastMessage">Profile Updated Successfully!</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
+                CLEVR
+            </a>
+
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <!-- Active Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="jokitugas.html">Assignment Helper</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="findtutor.html">Find Tutor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="myclasses.html">My Classes</a></li>
+                </ul>
+
+                <!-- Top Up Wallet Section (NEW) -->
+                <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 me-4 shadow-sm" style="height: 45px;">
+                    <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
+                    <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    <!-- UPDATE: text-white diganti jadi text-clevr-dark -->
+                    <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Profile Link -->
+                <div class="d-flex align-items-center profile-section">
+                    <img src="foto/user1.png" alt="Profile" class="rounded-circle me-3 shadow-sm profile-nav-img">
+                    <div class="profile-text d-none d-md-block text-start">
+                        <div class="fw-bold text-white" id="navName">Gita Aulia</div>
+                        <div class="small text-white-50">Student</div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row g-4">
+            
+            <!-- LEFT COLUMN: Personal Identity -->
+            <div class="col-lg-4">
+                <div class="card card-custom profile-header-card mb-4">
+                    <div class="position-relative d-inline-block mx-auto">
+                        <img src="foto/user1.png" alt="Gita Aulia" class="profile-big-img shadow-sm">
+                        <button class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle" style="width: 35px; height: 35px; border: 2px solid white;">
+                            <i class="fa-solid fa-camera"></i>
+                        </button>
+                    </div>
+                    
+                    <h3 class="fw-bold text-clevr-dark mb-1" id="profileName">Hayley Williams</h3>
+                    <p class="text-secondary mb-2" id="profileGrade">Junior High School • Grade 8</p>
+                    
+                    <div class="level-badge">
+                        <i class="fa-solid fa-rocket me-1"></i> Level 5 Scholar
+                    </div>
+
+                    <div class="d-grid gap-2 mt-3">
+                        <button class="btn btn-edit rounded-pill py-2 btn-animate" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fa-solid fa-pen-to-square me-2"></i> Edit Profile
+                        </button>
+                    </div>
+
+                    <hr class="my-4 opacity-25">
+
+                    <div class="text-start">
+                        <h6 class="fw-bold text-clevr-dark mb-3">Contact Info</h6>
+                        <div class="d-flex align-items-center mb-3 text-secondary">
+                            <i class="fa-solid fa-envelope me-3" style="width: 20px;"></i>
+                            <span class="small fw-bold" id="profileEmail">hayleywill@example.com</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-3 text-secondary">
+                            <i class="fa-solid fa-phone me-3" style="width: 20px;"></i>
+                            <span class="small fw-bold" id="profilePhone">+62 812-3456-7890</span>
+                        </div>
+                        <div class="d-flex align-items-center text-secondary">
+                            <i class="fa-solid fa-location-dot me-3" style="width: 20px;"></i>
+                            <span class="small fw-bold" id="profileCity">Sukoharjo, Indonesia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Account -->
+                <div class="card card-custom p-4 bg-clevr-light mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="fw-bold text-clevr-dark mb-0">Parent Account</h6>
+                        <span class="badge bg-success rounded-pill">Linked</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="bg-secondary rounded-circle text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark small">Mrs. Sarah Aulia</div>
+                            <div class="text-secondary small" style="font-size: 0.75rem;">Mom</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOGOUT BUTTON (Moved Here - Left Column) -->
+                <div class="d-grid">
+                    <a href="index.html" class="btn btn-outline-danger rounded-pill py-2 fw-bold btn-animate">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i> Log Out
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN (Content) -->
+            <div class="col-lg-8">
+                
+                <!-- 1. Stats -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="stat-card bg-clevr-purple">
+                            <div>
+                                <div class="display-6 fw-bold">3</div>
+                                <div class="small opacity-75 fw-bold">Upcoming Classes</div>
+                            </div>
+                            <div class="stat-icon-bg">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Up Clover -->
+                    <div class="col-md-4">
+                        <div class="stat-card bg-clevr-orange">
+                            <div>
+                                <div class="display-6 fw-bold">145</div>
+                                <div class="small opacity-75 fw-bold mb-1">Clover Balance</div>
+                                <button class="btn-topup">
+                                    <i class="fa-solid fa-plus me-1"></i> Top Up
+                                </button>
+                            </div>
+                            <div class="stat-icon-bg">
+                                <i class="fa-solid fa-clover"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="stat-card bg-clevr-dark">
+                            <div>
+                                <div class="display-6 fw-bold">24h</div>
+                                <div class="small opacity-75 fw-bold">Learning Time</div>
+                            </div>
+                            <div class="stat-icon-bg">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Achievements -->
+                <div class="card card-custom p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold text-clevr-dark mb-0">My Achievements</h5>
+                        <a href="#" class="small text-clevr-purple fw-bold text-decoration-none">View All</a>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-6 col-md-3">
+                            <div class="badge-item" data-bs-toggle="tooltip" title="Completed your first class!">
+                                <span class="badge-icon">🚀</span>
+                                <div class="small fw-bold text-dark">First Steps</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">Unlocked</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="badge-item" data-bs-toggle="tooltip" title="Asked 5 Questions in class">
+                                <span class="badge-icon">🙋‍♂️</span>
+                                <div class="small fw-bold text-dark">Active Asker</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">Unlocked</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="badge-item" data-bs-toggle="tooltip" title="Attended 5 Math Classes">
+                                <span class="badge-icon">➗</span>
+                                <div class="small fw-bold text-dark">Math Whiz</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">Unlocked</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="badge-item badge-locked" data-bs-toggle="tooltip" title="Complete 30 Days Streak">
+                                <span class="badge-icon">🔥</span>
+                                <div class="small fw-bold text-dark">On Fire</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">Locked</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. My Class Schedule -->
+                <div class="card card-custom p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold text-clevr-dark mb-0">My Class Schedule</h5>
+                        <a href="myclasses.html" class="small text-clevr-purple fw-bold text-decoration-none">View Full Schedule</a>
+                    </div>
+                    
+                    <div class="class-list">
+                        
+                        <div class="class-list-item">
+                            <div class="subject-icon bg-clevr-purple">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="text-secondary fw-bold" style="font-size: 0.8rem;">Monday, 15:00 WIB</div>
+                                <div class="fw-bold text-dark fs-5">Mathematics - Fractions</div>
+                                <div class="small text-muted">With Tutor Dara</div>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-clevr-pink text-dark rounded-pill px-3 py-2">Start Class</span>
+                            </div>
+                        </div>
+
+                        <div class="class-list-item">
+                            <div class="subject-icon bg-clevr-orange">
+                                <i class="fa-solid fa-flask"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="text-secondary fw-bold" style="font-size: 0.8rem;">Wednesday, 17:00 WIB</div>
+                                <div class="fw-bold text-dark fs-5">Science - Food Chain</div>
+                                <div class="small text-muted">With Tutor Gita</div>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-3 py-2">Upcoming</span>
+                            </div>
+                        </div>
+
+                        <div class="class-list-item">
+                            <div class="subject-icon bg-clevr-dark">
+                                <i class="fa-solid fa-landmark"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="text-secondary fw-bold" style="font-size: 0.8rem;">Friday, 17:00 WIB</div>
+                                <div class="fw-bold text-dark fs-5">History - Indonesia</div>
+                                <div class="small text-muted">With Tutor Athalla</div>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-3 py-2">Upcoming</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-clevr-dark">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Full Name</label>
+                            <input type="text" class="form-control" id="inputName" value="Gita Aulia">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Grade / Level</label>
+                            <input type="text" class="form-control" id="inputGrade" value="Junior High School • Grade 8">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Phone Number</label>
+                                <input type="text" class="form-control" id="inputPhone" value="+62 812-3456-7890">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">City</label>
+                                <input type="text" class="form-control" id="inputCity" value="Jakarta, Indonesia">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">Email Address</label>
+                            <input type="email" class="form-control" id="inputEmail" value="gita.aulia@example.com">
+                        </div>
+                        
+                        <button type="button" class="btn bg-clevr-dark text-white fw-bold w-100 py-2 rounded-3 btn-animate" onclick="saveProfile()">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize Tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        // Save Profile Function
+        function saveProfile() {
+            const newName = document.getElementById('inputName').value;
+            const newGrade = document.getElementById('inputGrade').value;
+            const newPhone = document.getElementById('inputPhone').value;
+            const newCity = document.getElementById('inputCity').value;
+            const newEmail = document.getElementById('inputEmail').value;
+
+            document.getElementById('profileName').innerText = newName;
+            document.getElementById('navName').innerText = newName; 
+            document.getElementById('profileGrade').innerText = newGrade;
+            document.getElementById('profilePhone').innerText = newPhone;
+            document.getElementById('profileCity').innerText = newCity;
+            document.getElementById('profileEmail').innerText = newEmail;
+
+            const modalEl = document.getElementById('editProfileModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            modalInstance.hide();
+
+            const toast = document.getElementById("profileToast");
+            toast.className = "custom-toast show";
+            setTimeout(() => toast.className = toast.className.replace("show", ""), 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - Student Dashboard</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles (Diambil dari Pricing.html) --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+
+        /* --- 2. Custom Colors Utilities --- */
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .bg-clevr-dark { background-color: var(--clevr-dark) !important; }
+        .bg-clevr-orange { background-color: var(--clevr-orange) !important; }
+        
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+        .text-clevr-orange { color: var(--clevr-orange) !important; }
+
+        /* --- 3. Component Styling --- */
+        
+        /* Navbar Styling */
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            transition: opacity 0.2s;
+        }
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+        
+        /* Profile Section in Navbar */
+        .profile-section img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        .profile-text {
+            line-height: 1.2;
+            color: white;
+        }
+
+        /* Hover effect for profile link */
+        a.profile-section {
+            transition: opacity 0.2s;
+        }
+        a.profile-section:hover {
+            opacity: 0.8;
+        }
+
+        /* Search Bar Styling */
+        .search-container {
+            position: relative;
+        }
+        .search-input {
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            padding: 1rem 1rem 1rem 3rem; /* Left padding for icon */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            font-size: 1rem;
+        }
+        .search-input:focus {
+            border-color: var(--clevr-purple);
+            box-shadow: 0 0 0 0.25rem rgba(130, 123, 255, 0.25);
+        }
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        /* Upcoming Class Card */
+        .upcoming-card {
+            background-color: var(--clevr-purple);
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(130, 123, 255, 0.3);
+            border: none;
+        }
+
+        /* Tutor Card Styling */
+        .tutor-card {
+            border-radius: 1.5rem; /* Lebih bulat seperti di gambar */
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        .tutor-card:hover {
+            transform: translateY(-5px);
+        }
+        .tutor-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 1rem;
+            object-fit: cover;
+            background-color: #f3f4f6; /* Placeholder color */
+        }
+        
+        /* Button Animation (from pricing.html) */
+        .btn-animate {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .btn-animate:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Icon kecil clover hijau */
+        .clover-icon {
+            color: #4ade80; /* Green */
+        }
+
+        /* --- 4. Notification Toast Styling --- */
+        .custom-toast {
+            visibility: hidden;
+            min-width: 300px;
+            background-color: var(--clevr-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px 24px;
+            position: fixed;
+            z-index: 1050;
+            left: 50%;
+            top: -100px;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .custom-toast.show {
+            visibility: visible;
+            opacity: 1;
+            top: 40px;
+        }
+        /* Utilitas warna untuk ikon di JS */
+        .text-success-custom { color: #4ade80 !important; }
+
+        /* --- 5. Modal Styling (UPDATED) --- */
+        .modal-content {
+            border-radius: 1.5rem;
+            border: none;
+        }
+        .modal-header {
+            border-bottom: 1px solid #f3f4f6;
+            padding: 1.5rem;
+        }
+        
+        /* TIME SLOT BUTTONS - FIXED COLORS */
+        .time-slot {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px; /* Sedikit lebih besar */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        /* HOVER: Background Ungu, Teks Putih */
+        .time-slot:hover {
+            border-color: var(--clevr-purple);
+            background-color: var(--clevr-purple);
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(130, 123, 255, 0.2);
+        }
+        /* Memaksa teks jam (yg tadinya ungu) jadi putih saat hover */
+        .time-slot:hover .text-clevr-purple {
+            color: white !important; 
+        }
+
+        /* SELECTED: Background Biru Tua, Teks Putih */
+        .time-slot.selected {
+            border-color: var(--clevr-dark);
+            background-color: var(--clevr-dark);
+            color: white !important;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        /* Memaksa teks jam jadi putih saat selected */
+        .time-slot.selected .text-clevr-purple {
+            color: white !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast Container -->
+    <div id="redirectToast" class="custom-toast">
+        <!-- UPDATE: Menambahkan ID pada ikon agar bisa diubah via JS -->
+        <i id="toastIcon" class="fa-solid fa-rocket text-clevr-orange fs-5"></i>
+        <span id="toastMessage">The system will redirect you to the class...</span>
+    </div>  
+
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
+                CLEVR
+            </a>
+
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" style="opacity:1;" href="home.html">Home</a></li>
+                    <!-- Active Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="jokitugas.html">Assignment Helper</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="findtutor.html">Find Tutor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="myclasses.html">My Classes</a></li>
+                </ul>
+
+                <!-- Top Up Wallet Section (NEW) -->
+                <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 me-4 shadow-sm" style="height: 45px;">
+                    <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
+                    <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    <!-- UPDATE: text-white diganti jadi text-clevr-dark -->
+                    <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Profile Link -->
+                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none">
+                    <img src="foto/user1.png" alt="Profile" class="rounded-circle me-3 shadow-sm">
+                    <div class="profile-text d-none d-md-block">
+                        <div class="fw-bold text-white">Hayley Williams</div>
+                        <div class="small text-white-50">Student</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        
+        <div class="mb-4">
+            <h1 class="fw-bold text-clevr-dark">Welcome, Little Star!</h1>
+        </div>
+
+        <div class="mb-5 search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" class="form-control search-input" placeholder="Search for your favorite Tutor or Lesson...">
+        </div>
+
+        <div class="mb-5">
+            <h4 class="fw-bold text-clevr-dark mb-3">Your Upcoming Class Schedule</h4>
+            
+            <div class="card upcoming-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+                <div class="mb-3 mb-md-0">
+                    <div class="small text-white-50 fw-bold mb-1 text-uppercase">Next Class:</div>
+                    <h2 class="fw-bold mb-1">Mathematics - Fractions</h2>
+                    <p class="mb-0 fs-5 opacity-75">Today, 15:00 WIB with Tutor Dara</p>
+                </div>
+                
+                <div>
+                    <!-- Button Trigger Notification -->
+                    <button onclick="showNotification()" class="btn bg-clevr-dark text-white fw-bold px-5 py-3 rounded-3 btn-animate border-0">
+                        Start Class!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h4 class="fw-bold text-clevr-dark mb-3">Featured Tutors (Quick Booking)</h4>
+            
+            <div class="row g-4">
+                
+                <div class="col-md-6">
+                    <div class="card tutor-card p-3">
+                        <div class="card-body d-flex align-items-start">
+                            <div class="me-3 flex-shrink-0">
+                                <img src="foto/tutor2.jpeg" alt="Tutor" class="tutor-img shadow-sm">
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="fw-bold text-clevr-dark mb-1">Marvelius Harven</h5>
+                                </div>
+                                <p class="small text-secondary fw-bold mb-2">
+                                    English Native<br>(Junior High)
+                                    <span class="text-warning ms-1"><i class="fa-solid fa-star"></i> 5.0</span>
+                                </p>
+                                
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fa-solid fa-clover clover-icon me-2"></i>
+                                    <span class="fw-bold text-clevr-dark small">7 Clovr / Session</span>
+                                </div>
+
+                                <button onclick="openBookingModal('Marvelius Harven', 'English')" class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
+                                    View & Book
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card tutor-card p-3">
+                        <div class="card-body d-flex align-items-start">
+                            <div class="me-3 flex-shrink-0">
+                                <img src="foto/tutor4.png" alt="Tutor" class="tutor-img shadow-sm">
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="fw-bold text-clevr-dark mb-1">Muhammad Athalladithya</h5>
+                                </div>
+                                <p class="small text-secondary fw-bold mb-2">
+                                    History Expert<br>(Junior High)
+                                    <span class="text-warning ms-1"><i class="fa-solid fa-star"></i> 5.0</span>
+                                </p>
+                                
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fa-solid fa-clover clover-icon me-2"></i>
+                                    <span class="fw-bold text-clevr-dark small">7 Clovr / Session</span>
+                                </div>
+
+                                <button onclick="openBookingModal('Muhammad Athalladithya', 'History')" class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
+                                    View & Book
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title fw-bold text-clevr-dark" id="modalTutorName">Tutor Name</h5>
+                        <p class="mb-0 small text-secondary" id="modalSubject">Subject</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="fw-bold text-clevr-dark mb-3">Select Available Time:</p>
+                    
+                    <div class="row g-2 mb-4">
+                        <div class="col-6">
+                            <div class="time-slot" onclick="selectTime(this)">
+                                <div class="small fw-bold">Today</div>
+                                <div class="text-clevr-purple fw-bold">16:00</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="time-slot" onclick="selectTime(this)">
+                                <div class="small fw-bold">Today</div>
+                                <div class="text-clevr-purple fw-bold">19:30</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="time-slot" onclick="selectTime(this)">
+                                <div class="small fw-bold">Tomorrow</div>
+                                <div class="text-clevr-purple fw-bold">10:00</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="time-slot" onclick="selectTime(this)">
+                                <div class="small fw-bold">Tomorrow</div>
+                                <div class="text-clevr-purple fw-bold">14:00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3 mb-4">
+                        <span class="small fw-bold text-secondary">Total Cost:</span>
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-clover clover-icon me-2"></i>
+                            <span class="fw-bold text-clevr-dark">7 Clovr</span>
+                        </div>
+                    </div>
+
+                    <button class="btn bg-clevr-dark text-white fw-bold w-100 py-3 rounded-3 btn-animate border-0" onclick="confirmBooking()">
+                        Confirm Booking
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Script for Notification -->
+    <script>
+        let toastTimeout; // Menyimpan timer agar tidak tumpang tindih
+
+        function showNotification(message, type = 'info') {
+            const toast = document.getElementById("redirectToast");
+            const msgElement = document.getElementById("toastMessage");
+            const iconElement = document.getElementById("toastIcon");
+
+            // 1. Update Teks Pesan
+            if(message && msgElement) msgElement.innerText = message;
+
+            // 2. Update Ikon & Warna Berdasarkan Tipe
+            // Reset dulu class icon
+            iconElement.className = "fa-solid fs-5 me-2"; 
+            
+            if (type === 'success') {
+                // Tipe Sukses: Centang Hijau
+                iconElement.classList.add('fa-circle-check', 'text-success-custom');
+            } else {
+                // Tipe Default/Redirect: Roket Oranye
+                iconElement.classList.add('fa-rocket', 'text-clevr-orange');
+            }
+            
+            // 3. Tampilkan Toast
+            toast.className = "custom-toast show";
+            
+            // Clear timeout lama jika user klik cepat berkali-kali
+            if (toastTimeout) clearTimeout(toastTimeout);
+            
+            // Set timeout baru untuk menyembunyikan
+            toastTimeout = setTimeout(() => {
+                toast.className = toast.className.replace("show", "");
+            }, 3000);
+        }
+
+        let bookingModal;
+        function openBookingModal(name, subject) {
+            document.getElementById('modalTutorName').innerText = name;
+            document.getElementById('modalSubject').innerText = subject;
+            if (!bookingModal) bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            bookingModal.show();
+        }
+
+        function selectTime(element) {
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function confirmBooking() {
+            if (bookingModal) bookingModal.hide();
+            // UPDATE: Menggunakan tipe 'success' agar ikon berubah jadi centang hijau
+            setTimeout(() => showNotification("Booking Successful! Class added to schedule.", 'success'), 500);
+        }
+    </script>
+
+</body>
+</html>
