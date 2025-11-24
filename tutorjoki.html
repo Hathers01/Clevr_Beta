@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - Task Market</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles (From home_tutor.html) --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #f9fafb;
+        }
+
+        /* Utilities */
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .bg-clevr-dark { background-color: var(--clevr-dark) !important; }
+        .bg-clevr-orange { background-color: var(--clevr-orange) !important; }
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+        .text-clevr-orange { color: var(--clevr-orange) !important; }
+
+        /* --- 2. Navbar Styling --- */
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            transition: opacity 0.2s;
+        }
+        .nav-link:hover { opacity: 0.8; }
+        
+        /* Active Link Style - As Requested */
+        .nav-link.active {
+            opacity: 1 !important;
+            border-bottom: 3px solid var(--clevr-orange);
+            padding-bottom: 5px;
+        }
+        
+        .profile-section img {
+            width: 45px; height: 45px; object-fit: cover; border: 2px solid white;
+        }
+        .profile-text { line-height: 1.2; color: white; }
+
+        /* --- 3. Page Specific Styles (Task Market) --- */
+        
+        /* Hero Banner */
+        .market-header {
+            background-color: var(--clevr-dark);
+            border-radius: 20px;
+            color: white;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(1, 26, 90, 0.2);
+            background-image: linear-gradient(45deg, var(--clevr-dark) 0%, #1e3a8a 100%);
+        }
+
+        /* Task Card Styling */
+        .task-card {
+            border: none;
+            border-radius: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(130, 123, 255, 0.15);
+        }
+
+        .task-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+        .badge-math { background-color: #e0e7ff; color: var(--clevr-dark); }
+        .badge-eng { background-color: #fce7f3; color: #db2777; }
+        .badge-sci { background-color: #dcfce7; color: #166534; }
+
+        .reward-pill {
+            background-color: #fff7ed;
+            border: 1px solid var(--clevr-orange);
+            color: var(--clevr-orange);
+            border-radius: 10px;
+            padding: 8px 15px;
+            font-weight: bold;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-take {
+            background-color: var(--clevr-purple);
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-take:hover {
+            background-color: #6c63ff;
+            transform: scale(1.05);
+            color: white;
+        }
+
+        /* Toast Notification */
+        .custom-toast {
+            visibility: hidden; min-width: 300px; background-color: var(--clevr-dark);
+            color: #fff; text-align: center; border-radius: 50px; padding: 16px 24px;
+            position: fixed; z-index: 1050; left: 50%; top: -100px; transform: translateX(-50%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); opacity: 0; transition: all 0.5s;
+            font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .custom-toast.show { visibility: visible; opacity: 1; top: 40px; }
+        .text-success-custom { color: #4ade80 !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="custom-toast">
+        <i class="fa-solid fa-circle-check text-success-custom"></i>
+        <span id="toastMessage">Action Successful!</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home_tutor.html">
+                CLEVR
+            </a>
+            
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home_tutor.html">Home</a>
+                    </li>
+                    <!-- New Button: Task Market (Active) -->
+                    <li class="nav-item">
+                        <a class="nav-link" style="opacity:1;" href=" ">Task Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tutorschedule.html">My Schedule</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="earnings.html">Earnings</a>
+                    </li>
+                </ul>
+                
+                <!-- Tutor Profile (Gita Aulia) -->
+                <a href="profiltutor.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                    <img src="foto/tutor3.jpeg" alt="Profile" class="rounded-circle me-3 shadow-sm">
+                    <div class="profile-text d-none d-md-block">
+                        <div class="fw-bold text-white">Gita Aulia</div>
+                        <div class="small text-white-50">Tutor</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        
+        <!-- Header Banner -->
+        <div class="market-header mb-5">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="fw-bold mb-2">Earn Extra Clovr! 🚀</h1>
+                    <p class="mb-0 opacity-75 fs-5">Browse tasks posted by students, help them out, and grow your earnings.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <div class="bg-white bg-opacity-10 p-3 rounded-4 d-inline-block text-start">
+                        <div class="small text-white-50 mb-1">Your Balance</div>
+                        <div class="fs-2 fw-bold">150 <i class="fa-solid fa-clover text-warning"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters & Tools -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+            <h4 class="fw-bold text-clevr-dark m-0"><i class="fa-solid fa-list-check me-2"></i>Available Tasks</h4>
+            
+            <div class="d-flex gap-2 w-100 w-md-auto">
+                <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                    <span class="input-group-text bg-white border-0 ps-3"><i class="fa-solid fa-magnifying-glass text-secondary"></i></span>
+                    <input type="text" class="form-control border-0" placeholder="Search tasks...">
+                </div>
+                <select class="form-select w-auto border-0 shadow-sm fw-bold text-secondary" style="background-color: white;">
+                    <option>All Subjects</option>
+                    <option>Mathematics</option>
+                    <option>English</option>
+                    <option>Science</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Task Grid -->
+        <div class="row g-4">
+            
+            <!-- Task 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card task-card p-3">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between mb-3 align-items-start">
+                            <span class="task-badge badge-math">Mathematics</span>
+                            <span class="small text-danger fw-bold"><i class="fa-regular fa-clock me-1"></i> Ends in 2h</span>
+                        </div>
+                        
+                        <h5 class="fw-bold text-clevr-dark mb-2">Linear Algebra Problems (5 Qs)</h5>
+                        
+                        <!-- Student Info -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://ui-avatars.com/api/?name=Student+One&background=random" class="rounded-circle me-2" width="25" height="25">
+                            <span class="small text-secondary">Posted by <strong>Alex</strong></span>
+                        </div>
+
+                        <p class="text-secondary small mb-4 flex-grow-1">
+                            "I need help solving matrix and vector problems. Please include the full step-by-step method..."
+                        </p>
+                        
+                        <hr class="opacity-10 my-3">
+
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="reward-pill">
+                                <i class="fa-solid fa-clover"></i> 15
+                            </div>
+                            <button onclick="takeTask(this)" class="btn btn-take px-4 py-2">
+                                Take Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card task-card p-3">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between mb-3 align-items-start">
+                            <span class="task-badge badge-eng">English</span>
+                            <span class="small text-secondary fw-bold"><i class="fa-regular fa-clock me-1"></i> Ends in 5h</span>
+                        </div>
+                        
+                        <h5 class="fw-bold text-clevr-dark mb-2">Essay Grammar Review</h5>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://ui-avatars.com/api/?name=Hayley+Williams&background=random" class="rounded-circle me-2" width="25" height="25">
+                            <span class="small text-secondary">Posted by <strong>Hayley</strong></span>
+                        </div>
+
+                        <p class="text-secondary small mb-4 flex-grow-1">
+                            "Please correct the grammar in my 300-word essay titled 'My Holiday'. Focus on Past Tense usage."
+                        </p>
+                        
+                        <hr class="opacity-10 my-3">
+
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="reward-pill">
+                                <i class="fa-solid fa-clover"></i> 10
+                            </div>
+                            <button onclick="takeTask(this)" class="btn btn-take px-4 py-2">
+                                Take Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card task-card p-3">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between mb-3 align-items-start">
+                            <span class="task-badge badge-sci">Physics</span>
+                            <span class="small text-secondary fw-bold"><i class="fa-regular fa-clock me-1"></i> Ends in 1d</span>
+                        </div>
+                        
+                        <h5 class="fw-bold text-clevr-dark mb-2">Newton's Laws Lab Report</h5>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://ui-avatars.com/api/?name=Ryan+K&background=random" class="rounded-circle me-2" width="25" height="25">
+                            <span class="small text-secondary">Posted by <strong>Ryan</strong></span>
+                        </div>
+
+                        <p class="text-secondary small mb-4 flex-grow-1">
+                            "Help needed to write a conclusion based on Newton's Second Law practical data. Data is already in Excel."
+                        </p>
+                        
+                        <hr class="opacity-10 my-3">
+
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="reward-pill">
+                                <i class="fa-solid fa-clover"></i> 25
+                            </div>
+                            <button onclick="takeTask(this)" class="btn btn-take px-4 py-2">
+                                Take Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Simple Interaction Script
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            const msg = document.getElementById("toastMessage");
+            msg.innerText = message;
+            toast.className = "custom-toast show";
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => { 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+
+        function takeTask(btn) {
+            // Visual feedback
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            
+            setTimeout(() => {
+                btn.innerText = "Accepted";
+                btn.classList.remove("btn-take");
+                btn.classList.add("btn-secondary");
+                btn.disabled = true;
+                
+                showToast("Task accepted! Check 'My Schedule' for details.");
+            }, 800);
+        }
+    </script>
+</body>
+</html>
