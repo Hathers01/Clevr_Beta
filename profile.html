@@ -248,6 +248,11 @@
             opacity: 1;
             top: 40px;
         }
+        
+        /* Cursor Pointer Utility */
+        .cursor-pointer {
+            cursor: pointer;
+        }
 
     </style>
 </head>
@@ -257,6 +262,12 @@
     <div id="profileToast" class="custom-toast">
         <i class="fa-solid fa-check-circle text-clevr-green"></i>
         <span id="toastMessage">Profile Updated Successfully!</span>
+    </div>
+
+    <!-- Notification Toast for Class Redirect -->
+    <div id="redirectToast" class="custom-toast">
+        <i class="fa-solid fa-rocket text-clevr-orange"></i>
+        <span>Redirecting to class...</span>
     </div>
 
     <!-- Navbar -->
@@ -273,7 +284,6 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
-                    <!-- Active Menu -->
                     <li class="nav-item">
                         <a class="nav-link" href="jokitugas.html">Task Market</a>
                     </li>
@@ -281,11 +291,10 @@
                     <li class="nav-item"><a class="nav-link" href="myclasses.html">My Classes</a></li>
                 </ul>
 
-                <!-- Top Up Wallet Section (NEW) -->
+                <!-- Top Up Wallet Section -->
                 <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 me-4 shadow-sm" style="height: 45px;">
                     <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
                     <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
-                    <!-- UPDATE: text-white diganti jadi text-clevr-dark -->
                     <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
                         <i class="fa-solid fa-plus"></i>
                     </button>
@@ -300,8 +309,6 @@
                     </div>
                 </div>
             </div>
-
-            </div>
         </div>
     </nav>
 
@@ -312,7 +319,7 @@
             <div class="col-lg-4">
                 <div class="card card-custom profile-header-card mb-4">
                     <div class="position-relative d-inline-block mx-auto">
-                        <img src="foto/user1.png" alt="Gita Aulia" class="profile-big-img shadow-sm">
+                        <img src="foto/user1.png" alt="Hayley Williams" class="profile-big-img shadow-sm">
                         <button class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle" style="width: 35px; height: 35px; border: 2px solid white;">
                             <i class="fa-solid fa-camera"></i>
                         </button>
@@ -367,7 +374,7 @@
                     </div>
                 </div>
 
-                <!-- LOGOUT BUTTON (Moved Here - Left Column) -->
+                <!-- LOGOUT BUTTON -->
                 <div class="d-grid">
                     <a href="index.html" class="btn btn-outline-danger rounded-pill py-2 fw-bold btn-animate">
                         <i class="fa-solid fa-right-from-bracket me-2"></i> Log Out
@@ -384,7 +391,7 @@
                     <div class="col-md-4">
                         <div class="stat-card bg-clevr-purple">
                             <div>
-                                <div class="display-6 fw-bold">3</div>
+                                <div class="display-6 fw-bold" id="upcoming-count">3</div>
                                 <div class="small opacity-75 fw-bold">Upcoming Classes</div>
                             </div>
                             <div class="stat-icon-bg">
@@ -461,57 +468,18 @@
                     </div>
                 </div>
 
-                <!-- 3. My Class Schedule -->
+                <!-- 3. My Class Schedule (DYNAMIC) -->
                 <div class="card card-custom p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h5 class="fw-bold text-clevr-dark mb-0">My Class Schedule</h5>
                         <a href="myclasses.html" class="small text-clevr-purple fw-bold text-decoration-none">View Full Schedule</a>
                     </div>
                     
-                    <div class="class-list">
-                        
-                        <div class="class-list-item">
-                            <div class="subject-icon bg-clevr-purple">
-                                <i class="fa-solid fa-calculator"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="text-secondary fw-bold" style="font-size: 0.8rem;">Monday, 15:00 WIB</div>
-                                <div class="fw-bold text-dark fs-5">Mathematics - Fractions</div>
-                                <div class="small text-muted">With Tutor Dara</div>
-                            </div>
-                            <div class="text-end">
-                                <span class="badge bg-clevr-pink text-dark rounded-pill px-3 py-2">Start Class</span>
-                            </div>
+                    <div class="class-list" id="schedule-list">
+                        <!-- Items will be injected here via Javascript -->
+                        <div class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
                         </div>
-
-                        <div class="class-list-item">
-                            <div class="subject-icon bg-clevr-orange">
-                                <i class="fa-solid fa-flask"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="text-secondary fw-bold" style="font-size: 0.8rem;">Wednesday, 17:00 WIB</div>
-                                <div class="fw-bold text-dark fs-5">Science - Food Chain</div>
-                                <div class="small text-muted">With Tutor Gita</div>
-                            </div>
-                            <div class="text-end">
-                                <span class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-3 py-2">Upcoming</span>
-                            </div>
-                        </div>
-
-                        <div class="class-list-item">
-                            <div class="subject-icon bg-clevr-dark">
-                                <i class="fa-solid fa-landmark"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="text-secondary fw-bold" style="font-size: 0.8rem;">Friday, 17:00 WIB</div>
-                                <div class="fw-bold text-dark fs-5">History - Indonesia</div>
-                                <div class="small text-muted">With Tutor Athalla</div>
-                            </div>
-                            <div class="text-end">
-                                <span class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-3 py-2">Upcoming</span>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 
@@ -531,7 +499,7 @@
                     <form id="editProfileForm">
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-secondary">Full Name</label>
-                            <input type="text" class="form-control" id="inputName" value="Gita Aulia">
+                            <input type="text" class="form-control" id="inputName" value="Hayley Williams">
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-secondary">Grade / Level</label>
@@ -544,12 +512,12 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold text-secondary">City</label>
-                                <input type="text" class="form-control" id="inputCity" value="Jakarta, Indonesia">
+                                <input type="text" class="form-control" id="inputCity" value="Sukoharjo, Indonesia">
                             </div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-secondary">Email Address</label>
-                            <input type="email" class="form-control" id="inputEmail" value="gita.aulia@example.com">
+                            <input type="email" class="form-control" id="inputEmail" value="hayleywill@example.com">
                         </div>
                         
                         <button type="button" class="btn bg-clevr-dark text-white fw-bold w-100 py-2 rounded-3 btn-animate" onclick="saveProfile()">
@@ -592,6 +560,121 @@
             toast.className = "custom-toast show";
             setTimeout(() => toast.className = toast.className.replace("show", ""), 3000);
         }
+
+        // Show Notification for Class Start
+        function showNotification() {
+            const toast = document.getElementById("redirectToast");
+            toast.className = "custom-toast show";
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+
+        // --- DYNAMIC CLASS SCHEDULE LOGIC (SYNCED WITH MYCLASSES.HTML) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('schedule-list');
+            const countDisplay = document.getElementById('upcoming-count');
+            
+            // 1. Ambil data real dari LocalStorage (Manual Booking)
+            const storedClasses = JSON.parse(localStorage.getItem('myClasses')) || [];
+
+            // 2. Data Palsu (Hardcoded) - Kelas Dara dari Home.html (Sama dengan myclasses.html)
+            const fakeClass = {
+                id: 'fake-dara-1',
+                time: 'Today, 15:00', 
+                subject: 'Mathematics', // Sedikit detail
+                tutorName: 'Dara'
+            };
+
+            // 3. Gabungkan Data
+            let allClasses = [fakeClass, ...storedClasses];
+
+            // Update Jumlah Kelas di Stat Card
+            if(countDisplay) countDisplay.innerText = allClasses.length;
+
+            // --- Parsing Waktu untuk Sorting ---
+            function getMinutes(timeStr) {
+                if (!timeStr) return 999999;
+                const str = timeStr.toLowerCase();
+                let addedMinutes = 0;
+                
+                if (str.includes('tomorrow') || str.includes('besok')) {
+                    addedMinutes = 24 * 60; 
+                } else if (str.includes('today') || str.includes('hari ini')) {
+                    addedMinutes = 0; 
+                } else {
+                    return 999999; 
+                }
+
+                const match = str.match(/(\d{1,2}):(\d{2})/);
+                if (match) {
+                    const hours = parseInt(match[1]);
+                    const minutes = parseInt(match[2]);
+                    return addedMinutes + (hours * 60) + minutes;
+                }
+                return addedMinutes;
+            }
+
+            // --- Helper: Get Subject Icon & Color ---
+            function getSubjectStyle(subject) {
+                const s = subject.toLowerCase();
+                if (s.includes('math')) return { icon: 'fa-calculator', bg: 'bg-clevr-purple' };
+                if (s.includes('science') || s.includes('fisika') || s.includes('kimia') || s.includes('biologi')) return { icon: 'fa-flask', bg: 'bg-clevr-orange' };
+                if (s.includes('history') || s.includes('sejarah')) return { icon: 'fa-landmark', bg: 'bg-clevr-dark' };
+                if (s.includes('english') || s.includes('bahasa')) return { icon: 'fa-language', bg: 'bg-primary' };
+                return { icon: 'fa-book', bg: 'bg-secondary' }; // Default
+            }
+
+            // --- SORTING ---
+            allClasses.sort((a, b) => getMinutes(a.time) - getMinutes(b.time));
+
+            if (allClasses.length > 0) {
+                container.innerHTML = ''; // Reset container
+
+                const simulatedCurrentTime = 15 * 60; // 15:00
+
+                allClasses.forEach(item => {
+                    const classTimeVal = getMinutes(item.time);
+                    const diff = classTimeVal - simulatedCurrentTime; 
+                    const isToday = classTimeVal < 24 * 60;
+                    
+                    let btnHtml = '';
+                    // Logic Tombol (Sama dengan myclasses.html)
+                    if (isToday && diff >= -10 && diff <= 15) {
+                        btnHtml = `<span class="badge bg-clevr-pink text-dark rounded-pill px-3 py-2 cursor-pointer btn-animate" onclick="showNotification()">Start Class</span>`;
+                    } else {
+                        btnHtml = `<span class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-3 py-2">Upcoming</span>`;
+                    }
+
+                    // Get Icon Style
+                    const style = getSubjectStyle(item.subject);
+
+                    // Render List Item (Gaya Profile.html)
+                    const itemHtml = `
+                        <div class="class-list-item">
+                            <div class="subject-icon ${style.bg}">
+                                <i class="fa-solid ${style.icon}"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="text-secondary fw-bold" style="font-size: 0.8rem;">${item.time} WIB</div>
+                                <div class="fw-bold text-dark fs-5">${item.subject}</div>
+                                <div class="small text-muted">With Tutor ${item.tutorName}</div>
+                            </div>
+                            <div class="text-end">
+                                ${btnHtml}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += itemHtml;
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-muted">
+                        <i class="fa-regular fa-calendar-xmark fa-2x mb-2 opacity-50"></i>
+                        <p class="small fw-bold">No upcoming classes.</p>
+                    </div>`;
+            }
+        });
     </script>
 </body>
 </html>
