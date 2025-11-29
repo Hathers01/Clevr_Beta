@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     
     <style>
         /* =========================================
@@ -48,25 +48,24 @@
             color: #4ade80 !important; /* Hijau Cerah */
         }
 
-         /* --- 2. NAVBAR STYLING (Spesifik) --- */
+         /* --- 2. NAVBAR STYLING (Disamakan dengan home.html) --- */
         .navbar-custom {
             height: 80px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             background-color: var(--clevr-purple);
         }
         
-        /* KHUSUS link di dalam Navbar saja yang putih */
-        .navbar-nav .nav-link {
-            color: white !important; 
+        .nav-link {
+            color: white !important;
             font-weight: 600;
             font-size: 1.1rem;
-            margin-right: 1.5rem;
             transition: opacity 0.2s;
+            white-space: nowrap;
         }
-        .navbar-nav .nav-link:hover { opacity: 0.8; }
+        .nav-link:hover { opacity: 0.8; }
 
-        /* Profile Section */
-        .profile-section img {
+        /* Profile Image Style */
+        .profile-img-nav {
             width: 45px;
             height: 45px;
             object-fit: cover;
@@ -151,6 +150,12 @@
             align-items: center;
             justify-content: space-between;
             transition: transform 0.2s ease;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .class-card:hover {
@@ -227,6 +232,16 @@
             }
         }
 
+        /* Button Animation */
+        .btn-animate {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .btn-animate:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        }
+
         /* --- 4. Notification Toast Styling --- */
         .custom-toast {
             visibility: hidden;
@@ -267,58 +282,56 @@
         <span>The system will redirect you to the class...</span>
     </div>
 
-    <!-- NAVBAR (Disamakan dengan findtutor.html) -->
-    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
-                CLEVR
-            </a>
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            
+            <!-- 1. LEFT GROUP: Logo + Menu -->
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
+                    CLEVR
+                </a>
+                <ul class="navbar-nav d-flex flex-row gap-4 mb-0">
                     <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
-                    <!-- Active Menu -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="jokitugas.html">Assignment Helper</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="jokitugas.html">Task Market</a></li>
                     <li class="nav-item"><a class="nav-link" href="findtutor.html">Find Tutor</a></li>
                     <li class="nav-item"><a class="nav-link" style="opacity:1;" href="myclasses.html">My Classes</a></li>
                 </ul>
+            </div>
 
-                <!-- Top Up Wallet Section (NEW) -->
-                <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 me-4 shadow-sm" style="height: 45px;">
+            <!-- 2. RIGHT GROUP: Wallet + Profile -->
+            <div class="d-flex align-items-center gap-3">
+                 <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 shadow-sm" style="height: 45px;">
                     <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
                     <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
-                    <!-- UPDATE: text-white diganti jadi text-clevr-dark -->
                     <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Profile Link -->
-                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none">
-                    <img src="foto/user1.png" alt="Profile" class="rounded-circle me-3 shadow-sm">
-                    <div class="profile-text d-none d-md-block">
+                <!-- Bagian Foto Profil (Sama Persis dengan home.html) -->
+                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                    <img src="foto/user1.png" alt="Profile" class="profile-img-nav shadow-sm me-2">
+                    <div class="profile-text d-none d-lg-block">
                         <div class="fw-bold text-white">Hayley Williams</div>
                         <div class="small text-white-50">Student</div>
                     </div>
                 </a>
             </div>
+
+        </div>
     </nav>
 
     <!-- MAIN CONTENT -->
     <main class="container py-5">
         
-        <!-- Header Title -->
         <h2 class="page-heading">Schedule & Class History</h2>
 
         <!-- Tabs Navigation -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab">
-                    Upcoming Classes (3)
+                    Upcoming Classes (0)
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -333,49 +346,10 @@
             
             <!-- Panel Upcoming (Active) -->
             <div class="tab-pane fade show active" id="upcoming" role="tabpanel">
-                
-                <!-- Card 1 -->
-                <div class="class-card">
-                    <div>
-                        <div class="text-date">Monday, 15:00 WIB</div>
-                        <div class="text-subject">Mathematics - Fractions</div>
-                        <div class="text-tutor">With Tutor Dara</div>
-                    </div>
-                    <div>
-                        <button onclick="showNotification()" class="btn btn-custom btn-start">
-                            Start (in 10m)
-                        </button>
-                    </div>
+                <div id="upcoming-container">
+                    <!-- Cards will be injected here by JS -->
+                    <!-- Loading or Empty state by default -->
                 </div>
-
-                <!-- Card 2 -->
-                <div class="class-card">
-                    <div>
-                        <div class="text-date">Wednesday, 17:00 WIB</div>
-                        <div class="text-subject">Science - Food Chain</div>
-                        <div class="text-tutor">With Tutor Gita</div>
-                    </div>
-                    <div>
-                        <button class="btn btn-custom btn-details">
-                            View Details
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="class-card">
-                    <div>
-                        <div class="text-date">Friday, 17:00 WIB</div>
-                        <div class="text-subject">History - Indonesian History</div>
-                        <div class="text-tutor">With Tutor Athalla</div>
-                    </div>
-                    <div>
-                        <button class="btn btn-custom btn-details">
-                            View Details
-                        </button>
-                    </div>
-                </div>
-
             </div>
             
             <!-- Panel History (Empty State) -->
@@ -391,7 +365,7 @@
     </main>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
 
     <script>
         function showNotification() {
@@ -401,6 +375,121 @@
                 toast.className = toast.className.replace("show", ""); 
             }, 3000);
         }
+
+        // --- LOAD DATA & SORTING LOGIC ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('upcoming-container');
+            const tabLabel = document.getElementById('upcoming-tab');
+            
+            // 1. Ambil data real dari LocalStorage (Manual Booking)
+            const storedClasses = JSON.parse(localStorage.getItem('myClasses')) || [];
+
+            // 2. Data Palsu (Hardcoded) - Kelas Dara dari Home.html
+            const fakeClass = {
+                id: 'fake-dara-1',
+                time: 'Today, 15:00', 
+                subject: 'Mathematics', 
+                tutorName: 'Dara'
+            };
+
+            // 3. Gabungkan Data
+            let allClasses = [fakeClass, ...storedClasses];
+
+            // --- FUNCTION UTAMA: Parsing Waktu untuk Sorting ---
+            // Mengubah "Today, 15:00" menjadi angka menit agar bisa diurutkan
+            function getMinutes(timeStr) {
+                if (!timeStr) return 999999;
+                const str = timeStr.toLowerCase();
+                let addedMinutes = 0;
+                
+                // Offset Hari
+                if (str.includes('tomorrow') || str.includes('besok')) {
+                    addedMinutes = 24 * 60; // Tambah 24 jam (1440 menit)
+                } else if (str.includes('today') || str.includes('hari ini')) {
+                    addedMinutes = 0; // Hari ini mulai dari 0
+                } else {
+                    return 999999; // Waktu tidak dikenal taruh paling bawah
+                }
+
+                // Ekstrak Jam:Menit (HH:mm)
+                const match = str.match(/(\d{1,2}):(\d{2})/);
+                if (match) {
+                    const hours = parseInt(match[1]);
+                    const minutes = parseInt(match[2]);
+                    return addedMinutes + (hours * 60) + minutes;
+                }
+                return addedMinutes;
+            }
+
+            // --- SORTING: Urutkan berdasarkan waktu terkecil ke terbesar ---
+            allClasses.sort((a, b) => getMinutes(a.time) - getMinutes(b.time));
+
+            // Update jumlah di Tab
+            tabLabel.innerText = `Upcoming Classes (${allClasses.length})`;
+
+            if (allClasses.length > 0) {
+                container.innerHTML = ''; // Reset container
+
+                // --- SIMULASI WAKTU SAAT INI: 15:00 ---
+                const simulatedCurrentTime = 15 * 60; // 900 menit (Jam 15:00)
+
+                allClasses.forEach(item => {
+                    const classTimeVal = getMinutes(item.time);
+                    const diff = classTimeVal - simulatedCurrentTime; 
+                    
+                    let btnHtml = '';
+
+                    // Logic Tombol Start:
+                    // 1. Harus "Hari Ini" (Nilai < 24 jam)
+                    // 2. Waktunya pas atau baru lewat sedikit (Diff antara -10 menit sampai +15 menit)
+                    //    Artinya jika jam 15:00 (diff 0), tombol muncul.
+                    //    Jika jam 16:00 (diff 60), tombol TIDAK muncul.
+                    const isToday = classTimeVal < 24 * 60;
+                    
+                    if (isToday && diff >= -10 && diff <= 15) {
+                        // Jika waktu kelas sekitar jam 15:00
+                        let btnText = "Start Class";
+                        if (diff > 0) btnText = `Start (in ${diff}m)`; // Countdown kecil jika belum pas 15:00
+
+                        btnHtml = `
+                        <button onclick="showNotification()" class="btn btn-custom btn-start">
+                            ${btnText}
+                        </button>`;
+                    } else {
+                        // Jika waktu kelas jauh dari jam 15:00 (misal 10:00, 16:00, atau Besok)
+                        btnHtml = `
+                        <button class="btn btn-custom btn-details">
+                            View Details
+                        </button>`;
+                    }
+
+                    // Render Card
+                    const cardHtml = `
+                        <div class="class-card">
+                            <div>
+                                <div class="text-date">${item.time} WIB</div>
+                                <div class="text-subject">${item.subject}</div>
+                                <div class="text-tutor">With Tutor ${item.tutorName}</div>
+                            </div>
+                            <div>
+                                ${btnHtml}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += cardHtml;
+                });
+            } else {
+                // Fallback (Seharusnya tidak muncul karena ada fakeClass)
+                container.innerHTML = `
+                    <div class="text-center py-5 text-muted">
+                        <i class="fa-regular fa-calendar-xmark fa-3x mb-3 opacity-50"></i>
+                        <p class="fw-bold">No upcoming classes booked yet.</p>
+                        <a href="findtutor.html" class="btn btn-custom btn-start mt-2 text-decoration-none">
+                            Find a Tutor
+                        </a>
+                    </div>`;
+            }
+        });
     </script>
     
 </body>

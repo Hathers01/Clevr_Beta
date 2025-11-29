@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLEVR - Assignment Helper Center</title>
+    <title>CLEVR - Task Market Center</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,9 @@
     
     <!-- CDN links -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fallback if local bootstrap is missing -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     
     <style>
         /* --- 1. Base Styles (Same as Home) --- */
@@ -32,6 +34,8 @@
 
         /* --- 2. Navbar Styling --- */
         .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .bg-clevr-orange { background-color: var(--clevr-orange) !important; } /* Added Orange Background */
+        
         .text-clevr-purple { color: var(--clevr-purple) !important; }
         .text-clevr-dark { color: var(--clevr-dark) !important; }
 
@@ -39,22 +43,35 @@
             height: 80px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+        
+        /* Navbar Links - Updated to match Home.html style */
         .nav-link {
             color: white !important;
             font-weight: 600;
             font-size: 1.1rem;
-            margin-right: 1.5rem;
             transition: opacity 0.2s;
+            white-space: nowrap;
         }
         .nav-link:hover { opacity: 0.8; }
         
-        .profile-section img {
-            width: 45px; height: 45px; object-fit: cover; border: 2px solid white;
+        /* Profile Styling */
+        .profile-img-nav {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 2px solid white;
+            border-radius: 50%;
         }
         .profile-text { line-height: 1.2; color: white; }
 
-        /* --- 3. Joki Form Styling (Adapted from Feedback Section Help.html) --- */
-        
+        a.profile-section {
+            transition: opacity 0.2s;
+        }
+        a.profile-section:hover {
+            opacity: 0.8;
+        }
+
+        /* --- 3. Joki Form Styling --- */
         .hero-title {
             color: var(--clevr-dark);
             font-weight: 700;
@@ -123,11 +140,6 @@
             box-shadow: 0 4px 12px rgba(130, 123, 255, 0.4);
         }
 
-        /* Icon kecil clover hijau */
-        .clover-icon {
-            color: #4ade80; /* Green */
-        }
-
         /* Notification Toast */
         .custom-toast {
             visibility: hidden; min-width: 300px; background-color: var(--clevr-dark);
@@ -139,7 +151,7 @@
         .custom-toast.show { visibility: visible; opacity: 1; top: 40px; }
         .text-success-custom { color: #4ade80 !important; }
         
-        /* New Style for Wallet Pill (Same as Home) */
+        /* Wallet & Animation */
         .clover-icon { 
             color: #4ade80; 
         }
@@ -162,44 +174,48 @@
         <span id="toastMessage">Assignment uploaded successfully!</span>
     </div>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">CLEVR</a>
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+    <!-- NAVBAR FIXED & ALIGNED (MATCHING HOME.HTML) -->
+    <nav class="navbar navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
             
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- 1. LEFT GROUP: Logo + Menu -->
+            <div class="d-flex align-items-center">
+                <!-- Logo -->
+                <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
+                    CLEVR
+                </a>
+
+                <!-- Menu Links (Horizontal - No Dropdown) -->
+                <ul class="navbar-nav d-flex flex-row gap-4 mb-0">
                     <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
-                    <!-- Active Menu -->
-                    <li class="nav-item">
-                        <a class="nav-link" style="opacity:1;" href="jokitugas.html">Assignment Helper</a>
-                    </li>
+                    <!-- Set Opacity 1 for Active Page -->
+                    <li class="nav-item"><a class="nav-link" style="opacity:1;" href="jokitugas.html">Task Market</a></li>
                     <li class="nav-item"><a class="nav-link" href="findtutor.html">Find Tutor</a></li>
                     <li class="nav-item"><a class="nav-link" href="myclasses.html">My Classes</a></li>
                 </ul>
+            </div>
 
-                <!-- Top Up Wallet Section (NEW) -->
-                <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 me-4 shadow-sm" style="height: 45px;">
+            <!-- 2. RIGHT GROUP: Wallet + Profile -->
+            <div class="d-flex align-items-center gap-3">
+                 <!-- Wallet Pill -->
+                 <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 shadow-sm" style="height: 45px;">
                     <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
                     <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
-                    <!-- UPDATE: text-white diganti jadi text-clevr-dark -->
                     <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
 
                 <!-- Profile Link -->
-                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none">
-                    <img src="foto/user1.png" alt="Profile" class="rounded-circle me-3 shadow-sm">
-                    <div class="profile-text d-none d-md-block">
+                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                    <img src="foto/user1.png" alt="Profile" class="profile-img-nav shadow-sm me-2">
+                    <div class="profile-text d-none d-lg-block">
                         <div class="fw-bold text-white">Hayley Williams</div>
                         <div class="small text-white-50">Student</div>
                     </div>
                 </a>
             </div>
+
         </div>
     </nav>
 
@@ -219,7 +235,7 @@
                 
                 <!-- Assignment Title -->
                 <div class="mb-3">
-                    <label for="judulTugas" class="form-label">Assignment Title</label>
+                    <label for="judulTugas" class="form-label">Task Market</label>
                     <input type="text" class="form-control-custom" id="judulTugas" placeholder="Example: Math Homework Page 50" required>
                 </div>
 
@@ -272,7 +288,8 @@
     </main>
 
     <!-- CDN JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script>
         // Function to show toast notification
         function showToast(message) {
