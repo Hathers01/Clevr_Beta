@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLEVR - Landing Page</title>
     
+    <!-- Menggunakan CDN untuk Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
@@ -38,6 +40,7 @@
             font-size: 2.5rem !important; /* Ukuran asli Bootstrap ~1.25rem */
             font-weight: 450;
             color: #011A5A;
+            text-decoration: none;
         }
 
         /* Warna kustom */
@@ -55,10 +58,12 @@
             color: #ffffff;
             font-weight: 100;
             border: none;
+            transition: all 0.3s ease;
         }
         .btn-custom-yellow:hover {
             background-color: #E49600;
             color: #fff1ff;
+            transform: translateY(-2px);
         }
 
         /* Penyesuaian untuk tombol Sign Up di navbar (grup) */
@@ -95,13 +100,9 @@
         .cta-section {
             position: relative;
             overflow: hidden; /* Sembunyikan overflow dari blobs */
-            /* padding: 80px 0; */ /* <-- PERUBAHAN: Dihapus agar bisa center vertikal */
-
-            /* -- PERUBAHAN: Ditambahkan untuk full height -- */
-            min-height: 100vh; 
+            min-height: 80vh; 
             display: flex;
             align-items: center;
-            /* ------------------------------------------ */
         }
         .cta-section::before,
         .cta-section::after {
@@ -143,16 +144,115 @@
         .footer-links a {
             text-decoration: none;
             color: #6c757d; /* Warna abu-abu (muted) Bootstrap */
+            transition: color 0.2s;
         }
         .footer-links a:hover {
-            color: #000;
+            color: #011A5A;
             text-decoration: underline;
         }
         .footer-bottom {
             font-size: 0.875rem; /* Sedikit lebih kecil */
         }
-        /* ---------------------------------- */
 
+        /* --- Updated: Wrapper untuk Text dengan Gambar Underline --- */
+        .text-highlight-wrapper {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+        /* --- BARU: Style untuk Underline seperti Coretan Spidol --- */
+        .highlight-underline {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+        .highlight-underline::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 5px; /* Sesuaikan posisi vertikal */
+            width: 100%;
+            height: 12px; /* Ketebalan coretan */
+            background-color: #FFD700; /* Warna kuning */
+            z-index: -1;
+            border-radius: 20% 80% 20% 80% / 80% 20% 80% 20%; /* Efek tidak rata natural */
+            transform: rotate(-1deg);
+            opacity: 0.8;
+        }
+        
+        /* Variasi sedikit untuk coretan kedua agar tidak persis sama */
+        .highlight-underline-2::after {
+            border-radius: 70% 30% 60% 40% / 30% 70% 40% 60%;
+            transform: rotate(1deg);
+            bottom: 2px;
+        }
+
+        /* --- Updated: Container Gambar Utama & Dekorasi Gambar --- */
+        .hero-image-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        /* Posisi Gambar Bintang (Kiri Atas) */
+        .deco-star-img {
+            position: absolute;
+            top: 10%;
+            left: -10%;
+            width: 90px;  /* Sesuaikan ukuran gambar bintang Anda */
+            height: auto;
+            z-index: 3;
+            /* Hapus animasi spin jika gambar statis tidak mau diputar */
+            /* animation: spin-slow 10s linear infinite; */ 
+        }
+
+        /* Posisi Gambar Buku (Kanan Bawah) */
+        .deco-book-img {
+            position: absolute;
+            bottom: 5%;
+            right: -5%;
+            width: 110px; /* Sesuaikan ukuran gambar buku Anda */
+            height: auto;
+            z-index: 3;
+            transform: rotate(15deg);
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- BARU: Style untuk Partikel Tanda Tanya --- */
+        .deco-question {
+            position: absolute;
+            z-index: 1;
+
+        }
+        /* Tanda tanya kiri atas */
+        .deco-question.q1 {
+            top: 10%;
+            left: 15%;
+            width: 60px;
+            transform: rotate(-20deg);
+        }
+        /* Tanda tanya kanan atas */
+        .deco-question.q3 {
+            top: 15%;
+            right: 18%;
+            width: 55px;
+            transform: rotate(15deg);
+        }
+
+        /* Agar section bisa menjadi acuan posisi absolute */
+        .section-relative {
+            position: relative;
+        }
+        /* Pastikan konten berada di atas partikel */
+        .content-above {
+            position: relative;
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -176,41 +276,70 @@
                 </div>
             </div>
         </div>
-    </nav> <section class="bg-white" style="padding: 5rem 0;">
+    </nav> 
+    
+    <section class="bg-white" style="padding: 5rem 0;">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-md-6 text-center text-md-start">
-                    <h1 class="display-3" style="color: #011A5A;">Learning is Fun,</h1>
-                    <h1 class="display-3" style="color: #011A5A;">Grades are Super!</h1>
+                    <h1 class="display-3" style="color: #011A5A;">Learning is <span class="highlight-underline">Fun,</span></h1>
+                    <h1 class="display-3" style="color: #011A5A;">Grades are <span class="highlight-underline highlight-underline-2">Super!</span></h1>
                     <p class="lead text-muted my-4">
                         Interactive online tutoring exclusively for elementary school children. Achieve success with our best Tutors!
                     </p>
-                    <a href="login.html" class="btn btn-custom-yellow shadow-sm btn-lg">
+                    <a href="#" class="btn btn-custom-yellow shadow-sm btn-lg">
                         START LEARNING NOW!
                     </a>
                 </div>
                 
-                <div class="col-md-6 text-center">
-                    <img src="foto/logotanpa.png" 
+                <div class="col-md-6 text-center position-relative">
+                    <!-- Container Wrapper untuk Gambar dan Dekorasi -->
+                    <div class="hero-image-container">
+                        
+                        <!-- GAMBAR PARTIKEL BINTANG (Kiri Atas) -->
+                        <!-- Ganti src dengan: foto/bintang.png atau semacamnya -->
+                        <img src="foto/Star.png" 
+                             class="deco-star-img" 
+                             alt="Partikel Bintang">
+
+                        <!-- Gambar Utama (Pensil) -->
+                    <!-- Placeholder image pengganti 'foto/logotanpa.png' agar preview jalan -->
+                    <img src="foto/Icon.png" 
                          alt="Ilustrasi Pensil Clevr" 
                          class="img-fluid" 
                          style="max-height: 450px; transform: rotate(10deg);">
+
+                        <!-- GAMBAR PARTIKEL BUKU (Kanan Bawah) -->
+                        <!-- Ganti src dengan: foto/buku.png atau semacamnya -->
+                        <img src="foto/Book.png" 
+                             class="deco-book-img" 
+                             alt="Partikel Buku">
+                             
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="bg-custom-orange text-white min-vh-100 d-flex flex-column justify-content-center">
-        <div class="container">
-            <h2 class="text-center display-4 mb-4">Why Choose Clever?</h2>
+    <!-- Tambahkan class 'section-relative' agar partikel bisa diposisikan -->
+    <section class="bg-custom-orange text-white py-5 section-relative">
+        <!-- Partikel Tanda Tanya -->
+        <!-- Gunakan file '_.png' yang Anda unggah -->
+        <img src="foto/_.png" class="deco-question q1" alt="Tanda Tanya">
+        <img src="foto/_.png" class="deco-question q3" alt="Tanda Tanya">
+
+        <!-- Tambahkan class 'content-above' agar teks tetap di atas partikel -->
+        <div class="container py-5 content-above">
+            <h2 class="text-center display-4 mb-5">Why Choose Clever?</h2>
             
-            <div class="row g-5 mt-3"> <div class="col-md-4">
+            <div class="row g-4 mt-3"> 
+                <div class="col-md-4">
                     <div class="card h-100 text-center shadow-lg border-0 rounded-4">
                         <div class="card-body p-5">
-                            <i class="bi bi-book-fill card-icon mb-3"></i>
-                            <h3 class="card-title" style="color: #011A5A">Instant Homework Rescue</h3>
+                            <i class="bi bi-alarm-fill card-icon mb-3" style="color: #F9A825;"></i>
+                            <h3 class="card-title" style="color: #011A5A">Instant Rescue</h3>
                             <p class="card-text text-muted">
-                                <br> Get help exactly when you need it. Simply post your task details and receive offers from qualified tutors instantly.
+                                <br> Get help exactly when you need it. Simply post your task details and receive offers instantly.
                             </p>
                         </div>
                     </div>
@@ -218,10 +347,10 @@
                 <div class="col-md-4">
                     <div class="card h-100 text-center shadow-lg border-0 rounded-4">
                         <div class="card-body p-5">
-                            <i class="bi bi-book-fill card-icon mb-3"></i>
-                            <h3 class="card-title text-dark">Top-Tier Tutors</h3>
+                            <i class="bi bi-mortarboard-fill card-icon mb-3" style="color: #7E57C2;"></i>
+                            <h3 class="card-title" style="color: #011A5A">Top-Tier Tutors</h3>
                             <p class="card-text text-muted">
-                                <br>Quality you can trust. We strictly vet our tutors so you only learn from experienced students from prestigious campuses.
+                                <br>Quality you can trust. We strictly vet our tutors so you only learn from the best students.
                             </p>
                         </div>
                     </div>
@@ -229,10 +358,10 @@
                 <div class="col-md-4">
                     <div class="card h-100 text-center shadow-lg border-0 rounded-4">
                         <div class="card-body p-5">
-                            <i class="bi bi-book-fill card-icon mb-3"></i>
-                            <h3 class="card-title text-dark">Flexible Learning</h3>
+                            <i class="bi bi-people-fill card-icon mb-3" style="color: #011A5A;"></i>
+                            <h3 class="card-title" style="color: #011A5A">Flexible Learning</h3>
                             <p class="card-text text-muted">
-                                <br>Prefer 1-on-1 focus or a study squad? Online or offline? You decide how and where you want to learn!
+                                <br>Prefer 1-on-1 focus or a study squad? Online or offline? You decide how and where to learn!
                             </p>
                         </div>
                     </div>
@@ -245,13 +374,16 @@
         <div class="container cta-container">
             <div class="row">
                 <div class="col-lg-10 col-xl-8 mx-auto">
-                    <div class="bg-custom-purple text-white p-5 text-center shadow-lg">
-                        <h2 class="display-5 mb-3">Ready to start your journey?</h2>
-                        <p class="lead mb-4">
+                    <div class="bg-custom-purple text-white p-5 text-center shadow-lg position-relative overflow-hidden">
+                        <!-- Dekorasi internal card -->
+                         <div style="position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                        
+                        <h2 class="display-5 mb-3 position-relative">Ready to start your journey?</h2>
+                        <p class="lead mb-4 position-relative">
                             Join CLEVR today and explore a world of knowledge with a
                             community of passionate learners and experienced tutors.
                         </p>
-                        <a href="signup.html" class="btn btn-custom-yellow shadow-sm btn-lg">
+                        <a href="#" class="btn btn-custom-yellow shadow-sm btn-lg position-relative">
                             Sign Up Now
                         </a>
                     </div>
@@ -264,17 +396,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md-3 mb-4">
-                    <h5 class="font-fredoka mb-3">Resources</h5>
+                    <h5 class="font-fredoka mb-3" style="color: #011A5A;">Resources</h5>
                     <ul class="footer-links">
                         <li><a href="login.html">Find a Tutor</a></li>
-                        <li><a href="signup.html">Become a Tutor</a></li>
+                        <li><a href="signup.html#tutor">Become a Tutor</a></li>
                         <li><a href="pricing.html">Pricing</a></li>
                         <li><a href="help.html#feedback">Feedback</a></li>
                     </ul>
                 </div>
                 
                 <div class="col-12 col-md-3 mb-4">
-                    <h5 class="font-fredoka mb-3">Help</h5>
+                    <h5 class="font-fredoka mb-3" style="color: #011A5A;">Help</h5>
                     <ul class="footer-links">
                         <li><a href="help.html">Get Help</a></li>
                         <li><a href="pricing.html#payment">Payment Options</a></li>
@@ -283,7 +415,7 @@
                 </div>
 
                 <div class="col-12 col-md-3 mb-4">
-                    <h5 class="font-fredoka mb-3">Company</h5>
+                    <h5 class="font-fredoka mb-3" style="color: #011A5A;">Company</h5>
                     <ul class="footer-links">
                         <li><a href="about.html">About CLEVR</a></li>
                         <li><a href="news.html">News</a></li>
@@ -291,12 +423,12 @@
                 </div>
 
                 <div class="col-12 col-md-3 mb-4">
-                    <h5 class="font-fredoka mb-3">Follow Us</h5>
+                    <h5 class="font-fredoka mb-3" style="color: #011A5A;">Follow Us</h5>
                     <ul class="footer-links d-flex gap-3" style="font-size: 1.5rem;">
-                        <li><a href="#"><i class="bi bi-twitter-x"></i></a></li>
-                        <li><a href="#"><i class="bi bi-instagram"></i></a></li>
-                        <li><a href="#"><i class="bi bi-facebook"></i></a></li>
-                        <li><a href="#"><i class="bi bi-youtube"></i></a></li>
+                        <li><a href="#" style="color:#011A5A;"><i class="bi bi-twitter-x"></i></a></li>
+                        <li><a href="#" style="color:#C13584;"><i class="bi bi-instagram"></i></a></li>
+                        <li><a href="#" style="color:#1877F2;"><i class="bi bi-facebook"></i></a></li>
+                        <li><a href="#" style="color:#FF0000;"><i class="bi bi-youtube"></i></a></li>
                     </ul>
                 </div>
             </div>
@@ -314,7 +446,7 @@
         </div>
     </footer>
 
-
+    <!-- JS Bootstrap Bundle CDN -->
     <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
