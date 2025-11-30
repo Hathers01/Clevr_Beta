@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEVR - Top Up Wallet</title>
+    
+    <!-- Google Fonts: Fredoka -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome (Online) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap 5 CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Base Styles (Diambil dari home.html) --- */
+        :root {
+            --clevr-purple: #827BFF;
+            --clevr-dark: #011A5A;
+            --clevr-orange: #FDA700;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+
+        /* --- 2. Custom Colors Utilities --- */
+        .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
+        .bg-clevr-dark { background-color: var(--clevr-dark) !important; }
+        .bg-clevr-orange { background-color: var(--clevr-orange) !important; }
+        
+        .text-clevr-purple { color: var(--clevr-purple) !important; }
+        .text-clevr-dark { color: var(--clevr-dark) !important; }
+        .text-clevr-orange { color: var(--clevr-orange) !important; }
+
+        /* --- 3. Navbar Styling (Sama Persis) --- */
+        .navbar-custom {
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+        .nav-link:hover { opacity: 0.8; }
+        
+        .profile-img-nav {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .profile-text { line-height: 1.2; color: white; }
+
+        a.profile-section {
+            transition: opacity 0.2s;
+        }
+        a.profile-section:hover {
+            opacity: 0.8;
+        }
+
+        /* --- 4. Top Up Specific Styles --- */
+        .main-card {
+            max-width: 700px;
+            margin: 0 auto;
+            border-radius: 1.5rem;
+            border: none;
+            /* Shadow disamakan dengan gaya dashboard */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            background: white;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--clevr-dark);
+            margin-bottom: 5px;
+        }
+
+        .balance-info {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Package Item Card */
+        .package-item {
+            border: 2px solid #f3f4f6;
+            border-radius: 1rem;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+        }
+        .package-item:hover {
+            border-color: var(--clevr-purple);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 20px;
+        }
+        .icon-box-green { background-color: #ecfdf5; color: #4ade80; }
+        .icon-box-purple { background-color: #eef2ff; color: var(--clevr-purple); }
+
+        .badge-best {
+            background-color: #fffbeb;
+            color: #d97706;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-left: 10px;
+            text-transform: uppercase;
+            border: 1px solid #fcd34d;
+        }
+
+        /* Payment Method Styles */
+        .payment-option {
+            border: 2px solid #f3f4f6;
+            border-radius: 1rem;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .payment-option:hover {
+            background-color: #f9fafb;
+        }
+        .payment-option.active {
+            border-color: var(--clevr-purple);
+            background-color: #eef2ff;
+        }
+        .payment-option input[type="radio"] {
+            accent-color: var(--clevr-purple);
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+        }
+
+        /* Success State */
+        .success-circle {
+            width: 100px;
+            height: 100px;
+            background-color: #ecfdf5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+        }
+        .success-circle i {
+            font-size: 3.5rem;
+            color: #4ade80;
+        }
+
+        /* Buttons */
+        .btn-animate {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .btn-animate:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        }
+        
+        .clover-icon { color: #4ade80; }
+        .d-none { display: none !important; }
+        .cursor-pointer { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR FIXED & ALIGNED (Sama persis dari home.html) -->
+    <nav class="navbar navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            
+            <!-- 1. LEFT GROUP: Logo + Menu -->
+            <div class="d-flex align-items-center">
+                <!-- Logo -->
+                <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
+                    CLEVR
+                </a>
+
+                <!-- Menu Links (Horizontal) -->
+                <ul class="navbar-nav d-flex flex-row gap-4 mb-0">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="jokitugas.html">Task Market</a></li>
+                    <li class="nav-item"><a class="nav-link" href="findtutor.html">Find Tutor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="myclasses.html">My Classes</a></li>
+                </ul>
+            </div>
+
+            <!-- 2. RIGHT GROUP: Wallet + Profile -->
+            <div class="d-flex align-items-center gap-3">
+                 <!-- Wallet Pill -->
+                 <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 shadow-sm" style="height: 45px;">
+                    <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
+                    <!-- Added ID nav-balance -->
+                    <span id="nav-balance" class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr" onclick="location.reload()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Profile Link -->
+                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                    <img src="foto/user1.png" alt="Profile" class="profile-img-nav shadow-sm me-2">
+                    <div class="profile-text d-none d-lg-block">
+                        <div class="fw-bold text-white">Hayley Williams</div>
+                        <div class="small text-white-50">Student</div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        
+        <div class="main-card">
+            
+            <!-- HEADER SECTION -->
+            <div id="header-section" class="mb-4">
+                <div class="d-flex align-items-center mb-1">
+                    <i class="fa-solid fa-arrow-left me-3 cursor-pointer d-none text-secondary" id="back-btn" style="font-size: 1.2rem;" onclick="goBack()"></i>
+                    <h2 class="section-title">Top Up Wallet</h2>
+                </div>
+                <!-- Added ID header-balance -->
+                <p class="balance-info">Current Balance: <span id="header-balance" class="fw-bold text-clevr-purple">1,250 Clovr</span></p>
+            </div>
+
+            <!-- LAYER 1: SELECT PACKAGE -->
+            <div id="layer-1">
+                <h6 class="text-secondary fw-bold text-uppercase mb-3 small" style="letter-spacing: 1px;">Select Amount</h6>
+
+                <!-- Package 1 -->
+                <div class="package-item" onclick="selectPackage('50 Clovr', 'Rp 50.000')">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box icon-box-green"><i class="fa-solid fa-clover"></i></div>
+                        <h5 class="fw-bold mb-0 text-clevr-dark">50 Clovr</h5>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold text-secondary me-3">Rp 50.000</span>
+                        <i class="fa-solid fa-chevron-right text-secondary"></i>
+                    </div>
+                </div>
+
+                <!-- Package 2 (Best Value) -->
+                <div class="package-item" onclick="selectPackage('150 Clovr', 'Rp 120.000')" style="border-color: #e0e7ff; background-color: #fafbff;">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box icon-box-purple"><i class="fa-solid fa-star"></i></div>
+                        <div>
+                            <div class="d-flex align-items-center">
+                                <h5 class="fw-bold mb-0 text-clevr-dark">150 Clovr</h5>
+                                <span class="badge-best">Best Value</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold text-secondary me-3">Rp 120.000</span>
+                        <i class="fa-solid fa-chevron-right text-secondary"></i>
+                    </div>
+                </div>
+
+                <!-- Package 3 -->
+                <div class="package-item" onclick="selectPackage('500 Clovr', 'Rp 350.000')">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box icon-box-green"><i class="fa-solid fa-clover"></i></div>
+                        <h5 class="fw-bold mb-0 text-clevr-dark">500 Clovr</h5>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold text-secondary me-3">Rp 350.000</span>
+                        <i class="fa-solid fa-chevron-right text-secondary"></i>
+                    </div>
+                </div>
+
+                 <!-- Package 4 -->
+                 <div class="package-item" onclick="selectPackage('1000 Clovr', 'Rp 650.000')">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box icon-box-green"><i class="fa-solid fa-clover"></i></div>
+                        <h5 class="fw-bold mb-0 text-clevr-dark">1000 Clovr</h5>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold text-secondary me-3">Rp 650.000</span>
+                        <i class="fa-solid fa-chevron-right text-secondary"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- LAYER 2: PAYMENT METHOD -->
+            <div id="layer-2" class="d-none">
+                
+                <div class="bg-light p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-clevr-purple">Selected Package</span>
+                    <span class="fw-bold text-clevr-dark" id="summary-text">50 Clovr (Rp 50.000)</span>
+                </div>
+
+                <h6 class="text-secondary fw-bold text-uppercase mb-3 small" style="letter-spacing: 1px;">Payment Method</h6>
+
+                <div class="payment-option active" onclick="selectPayment(this)">
+                    <input type="radio" name="payment" id="gopay" checked>
+                    <label class="d-flex align-items-center w-100 cursor-pointer" for="gopay">
+                        <i class="fa-solid fa-wallet me-3 text-secondary fs-5"></i>
+                        <span class="fw-bold text-clevr-dark">GoPay App</span>
+                    </label>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment(this)">
+                    <input type="radio" name="payment" id="qris">
+                    <label class="d-flex align-items-center w-100 cursor-pointer" for="qris">
+                        <i class="fa-solid fa-qrcode me-3 text-secondary fs-5"></i>
+                        <span class="fw-bold text-clevr-dark">QRIS (OVO/Dana/Shopee)</span>
+                    </label>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment(this)">
+                    <input type="radio" name="payment" id="bank">
+                    <label class="d-flex align-items-center w-100 cursor-pointer" for="bank">
+                        <i class="fa-solid fa-building-columns me-3 text-secondary fs-5"></i>
+                        <span class="fw-bold text-clevr-dark">Bank Transfer</span>
+                    </label>
+                </div>
+
+                <button class="btn bg-clevr-purple text-white fw-bold w-100 py-3 rounded-3 btn-animate border-0 mt-4 fs-5" id="pay-btn" onclick="processPayment()">
+                    Pay Rp 50.000
+                </button>
+            </div>
+
+            <!-- LAYER 3: SUCCESS -->
+            <div id="layer-3" class="d-none text-center pt-3">
+                <div class="success-circle">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h2 class="fw-bold text-clevr-dark mb-2">Payment Successful!</h2>
+                <p class="text-secondary mb-4">
+                    You have added <strong id="success-amount-text" class="text-clevr-purple">50 Clovr</strong> to your wallet.
+                </p>
+                
+                <button class="btn bg-clevr-dark text-white fw-bold px-5 py-3 rounded-3 btn-animate border-0" onclick="window.location.href='home.html'">
+                    Back to Home
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- LOGIC SALDO DINAMIS ---
+        
+        // 1. Inisialisasi saldo (Ambil dari penyimpanan browser, atau pakai default 1250)
+        let currentBalance = localStorage.getItem('clovrBalance') ? parseInt(localStorage.getItem('clovrBalance')) : 1250;
+
+        // 2. Fungsi untuk update tampilan saldo di Navbar dan Header
+        function updateBalanceDisplay() {
+            const formattedBalance = currentBalance.toLocaleString();
+            
+            // Update Navbar
+            const navBalance = document.getElementById('nav-balance');
+            if(navBalance) navBalance.innerText = formattedBalance;
+
+            // Update Header (jika ada)
+            const headerBalance = document.getElementById('header-balance');
+            if(headerBalance) headerBalance.innerText = formattedBalance + " Clovr";
+        }
+
+        // Jalankan update saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', updateBalanceDisplay);
+
+        // --- VARIABEL TRANSAKSI ---
+        let selectedAmount = '';
+        let selectedPriceText = '';
+        let selectedValue = 0; // Untuk menyimpan angka murni (cth: 50)
+
+        function selectPackage(amount, price) {
+            selectedAmount = amount;
+            selectedPriceText = price;
+            
+            // Ambil angka dari teks "50 Clovr" -> 50
+            selectedValue = parseInt(amount.split(' ')[0]);
+
+            // Update UI Layer 2
+            document.getElementById('summary-text').innerText = `${amount} (${price})`;
+            document.getElementById('pay-btn').innerText = `Pay ${price}`;
+
+            // Transition
+            document.getElementById('layer-1').classList.add('d-none');
+            document.getElementById('layer-2').classList.remove('d-none');
+            
+            // Show Back Button
+            document.getElementById('back-btn').classList.remove('d-none');
+        }
+
+        function goBack() {
+            document.getElementById('layer-2').classList.add('d-none');
+            document.getElementById('layer-1').classList.remove('d-none');
+            document.getElementById('back-btn').classList.add('d-none');
+        }
+
+        function selectPayment(element) {
+            // Reset Active
+            document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('active'));
+            // Set Active
+            element.classList.add('active');
+            element.querySelector('input').checked = true;
+        }
+
+        function processPayment() {
+            const btn = document.getElementById('pay-btn');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Processing...';
+            btn.style.opacity = '0.8';
+
+            setTimeout(() => {
+                // --- PROSES PENAMBAHAN SALDO ---
+                
+                // 1. Tambah saldo saat ini dengan paket yang dipilih
+                currentBalance += selectedValue;
+
+                // 2. Simpan saldo baru ke browser (LocalStorage)
+                localStorage.setItem('clovrBalance', currentBalance);
+
+                // 3. Update tampilan saldo segera
+                updateBalanceDisplay();
+
+                // --- UPDATE UI SUKSES ---
+                document.getElementById('success-amount-text').innerText = selectedAmount;
+
+                // Hide Header completely for clean success look
+                document.getElementById('header-section').classList.add('d-none');
+
+                // Show Layer 3
+                document.getElementById('layer-2').classList.add('d-none');
+                document.getElementById('layer-3').classList.remove('d-none');
+            }, 1500); // Simulasi loading 1.5 detik
+        }
+    </script>
+</body>
+</html>

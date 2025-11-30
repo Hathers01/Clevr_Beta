@@ -38,25 +38,28 @@
         .text-clevr-dark { color: var(--clevr-dark) !important; }
         .text-clevr-orange { color: var(--clevr-orange) !important; }
 
-        /* --- 2. Navbar Styling --- */
+        /* --- 2. Navbar Styling (Updated for Fixed Inline Layout) --- */
         .navbar-custom {
             height: 80px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+        
         .nav-link {
             color: white !important;
             font-weight: 600;
             font-size: 1.1rem;
-            margin-right: 1.5rem;
             transition: opacity 0.2s;
+            opacity: 0.7; /* Default transparency for inactive links */
+            white-space: nowrap; /* Prevent text wrapping */
         }
-        .nav-link:hover { opacity: 0.8; }
+        .nav-link:hover {
+            opacity: 1;
+        }
         
-        /* Active Link Style - As Requested */
+        /* Active Link Style - Modified to remove underline */
         .nav-link.active {
             opacity: 1 !important;
-            border-bottom: 3px solid var(--clevr-orange);
-            padding-bottom: 5px;
+            /* border-bottom removed */
         }
         
         .profile-section img {
@@ -93,6 +96,16 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(130, 123, 255, 0.15);
         }
+        
+        /* Animation for new task */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .new-task-anim {
+            animation: slideDown 0.5s ease-out forwards;
+            border: 2px solid var(--clevr-orange); /* Highlight new task */
+        }
 
         .task-badge {
             font-size: 0.75rem;
@@ -104,6 +117,8 @@
         .badge-math { background-color: #e0e7ff; color: var(--clevr-dark); }
         .badge-eng { background-color: #fce7f3; color: #db2777; }
         .badge-sci { background-color: #dcfce7; color: #166534; }
+        .badge-prog { background-color: #e0f2fe; color: #0369a1; }
+        .badge-gen { background-color: #f3f4f6; color: #4b5563; }
 
         .reward-pill {
             background-color: #fff7ed;
@@ -131,6 +146,199 @@
             color: white;
         }
 
+        /* --- 4. Stepper Progress Style (Working On Section) --- */
+        #workingOnSection {
+            display: none; /* Hidden by default, shown via JS */
+        }
+
+        .active-task-card {
+            background: white;
+            border-radius: 1.2rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            padding: 2rem;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        .student-pill {
+            background-color: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .stepper-wrapper {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Line behind the circles */
+        .stepper-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #e0e0e0;
+            z-index: 0;
+            border-radius: 4px;
+        }
+        
+        /* Colored line for progress */
+        .progress-line-fill {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 4px;
+            background-color: var(--clevr-purple);
+            z-index: 1;
+            border-radius: 4px;
+            width: 0%; 
+            transition: width 0.3s ease;
+        }
+
+        .stepper-item {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .step-counter {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #fff;
+            border: 4px solid #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #ccc;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+
+        .step-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #9ca3af;
+            text-transform: uppercase;
+        }
+
+        /* Active State */
+        .stepper-item.active .step-counter {
+            background-color: var(--clevr-purple);
+            border-color: var(--clevr-purple);
+            color: white;
+        }
+        .stepper-item.active .step-name {
+            color: var(--clevr-purple);
+        }
+
+        .btn-chat {
+            border: 2px solid #e5e7eb; color: #4b5563; background: white; font-weight: bold; border-radius: 10px;
+        }
+        .btn-chat:hover { background: #f9fafb; border-color: #d1d5db; }
+        
+        .btn-done {
+            background-color: #22c55e; color: white; font-weight: bold; border-radius: 10px; border: none;
+        }
+        .btn-done:hover { background-color: #16a34a; color: white; }
+
+        /* --- 5. "AWESOME WORK" MODAL STYLES (UPDATED) --- */
+        .payment-modal .modal-content {
+            border-radius: 2rem;
+            border: none;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .icon-clover-bg {
+            width: 80px;
+            height: 80px;
+            background-color: #dcfce7; /* Light green */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            position: relative;
+        }
+        
+        .icon-clover-bg i {
+            color: #16a34a; /* Green */
+            font-size: 2.2rem;
+        }
+
+        .modal-title-custom {
+            font-weight: 800;
+            color: var(--clevr-dark);
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-text {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+        
+        .reward-box {
+            background-color: #fffbeb; /* Creamy yellow */
+            border: 1px solid #fde68a;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .reward-amount {
+            color: #f59e0b; /* Amber */
+            font-weight: 800;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-modal-action {
+            background-color: var(--clevr-dark);
+            color: white;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            border: none;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .btn-modal-action:hover {
+            background-color: #1e3a8a;
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        /* Close button adjust */
+        .modal-close-custom {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+        }
+
         /* Toast Notification */
         .custom-toast {
             visibility: hidden; min-width: 300px; background-color: var(--clevr-dark);
@@ -151,26 +359,22 @@
         <span id="toastMessage">Action Successful!</span>
     </div>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
-        <div class="container-fluid">
-            <!-- Brand -->
-            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="tutorhome.html">
-                CLEVR
-            </a>
-            
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <!-- Navbar Layout Berjejer (Inline) -->
+    <nav class="navbar navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <!-- Bagian Kiri: Brand + Menu Navigasi -->
+            <div class="d-flex align-items-center overflow-auto">
+                <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="tutorhome.html">
+                    CLEVR
+                </a>
+                
+                <!-- Menu (Menggunakan d-flex flex-row agar selalu berjejer) -->
+                <ul class="navbar-nav d-flex flex-row gap-4 mb-0">
                     <li class="nav-item">
                         <a class="nav-link" href="tutorhome.html">Home</a>
                     </li>
-                    <!-- New Button: Task Market (Active) -->
                     <li class="nav-item">
-                        <a class="nav-link" style="opacity:1;" href=" ">Task Market</a>
+                        <a class="nav-link active" href=" ">Task Market</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="tutorschedule.html">My Schedule</a>
@@ -179,16 +383,16 @@
                         <a class="nav-link" href="tutorearnings.html">Earnings</a>
                     </li>
                 </ul>
-                
-                <!-- Tutor Profile (Gita Aulia) -->
-                <a href="tutorprofile.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
-                    <img src="foto/tutor3.jpeg" alt="Profile" class="rounded-circle me-3 shadow-sm">
-                    <div class="profile-text d-none d-md-block">
-                        <div class="fw-bold text-white">Gita Aulia</div>
-                        <div class="small text-white-50">Tutor</div>
-                    </div>
-                </a>
             </div>
+            
+            <!-- Bagian Kanan: Profil -->
+            <a href="profiltutor.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer flex-shrink-0 ms-3">
+                <img src="foto/tutor3.jpeg" alt="Profile" class="rounded-circle me-3 shadow-sm">
+                <div class="profile-text d-none d-md-block">
+                    <div class="fw-bold text-white">Gita Aulia</div>
+                    <div class="small text-white-50">Tutor</div>
+                </div>
+            </a>
         </div>
     </nav>
 
@@ -204,7 +408,8 @@
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
                     <div class="bg-white bg-opacity-10 p-3 rounded-4 d-inline-block text-start">
                         <div class="small text-white-50 mb-1">Your Balance</div>
-                        <div class="fs-2 fw-bold">150 <i class="fa-solid fa-clover text-warning"></i></div>
+                        <!-- Added ID here for dynamic update -->
+                        <div class="fs-2 fw-bold"><span id="tutorBalanceDisplay">150</span> <i class="fa-solid fa-clover text-warning"></i></div>
                     </div>
                 </div>
             </div>
@@ -228,10 +433,11 @@
             </div>
         </div>
 
-        <!-- Task Grid -->
-        <div class="row g-4">
+        <!-- Task Grid (Container ID added for JS) -->
+        <div id="taskGrid" class="row g-4 mb-5">
+            <!-- Dynamic tasks from LocalStorage will be injected here -->
             
-            <!-- Task 1 -->
+            <!-- Default Dummy Tasks -->
             <div class="col-md-6 col-lg-4">
                 <div class="card task-card p-3">
                     <div class="card-body d-flex flex-column">
@@ -239,34 +445,23 @@
                             <span class="task-badge badge-math">Mathematics</span>
                             <span class="small text-danger fw-bold"><i class="fa-regular fa-clock me-1"></i> Ends in 2h</span>
                         </div>
-                        
                         <h5 class="fw-bold text-clevr-dark mb-2">Linear Algebra Problems (5 Qs)</h5>
-                        
-                        <!-- Student Info -->
                         <div class="d-flex align-items-center mb-3">
                             <img src="https://ui-avatars.com/api/?name=Student+One&background=random" class="rounded-circle me-2" width="25" height="25">
                             <span class="small text-secondary">Posted by <strong>Alex</strong></span>
                         </div>
-
                         <p class="text-secondary small mb-4 flex-grow-1">
                             "I need help solving matrix and vector problems. Please include the full step-by-step method..."
                         </p>
-                        
                         <hr class="opacity-10 my-3">
-
                         <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="reward-pill">
-                                <i class="fa-solid fa-clover"></i> 15
-                            </div>
-                            <button onclick="takeTask(this)" class="btn btn-take px-4 py-2">
-                                Take Task
-                            </button>
+                            <div class="reward-pill"><i class="fa-solid fa-clover"></i> 15</div>
+                            <button class="btn btn-take px-4 py-2" onclick="showToast('This is a demo task.')">Take Task</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Task 2 -->
             <div class="col-md-6 col-lg-4">
                 <div class="card task-card p-3">
                     <div class="card-body d-flex flex-column">
@@ -274,99 +469,342 @@
                             <span class="task-badge badge-eng">English</span>
                             <span class="small text-secondary fw-bold"><i class="fa-regular fa-clock me-1"></i> Ends in 5h</span>
                         </div>
-                        
                         <h5 class="fw-bold text-clevr-dark mb-2">Essay Grammar Review</h5>
-                        
                         <div class="d-flex align-items-center mb-3">
                             <img src="https://ui-avatars.com/api/?name=Hayley+Williams&background=random" class="rounded-circle me-2" width="25" height="25">
                             <span class="small text-secondary">Posted by <strong>Hayley</strong></span>
                         </div>
-
                         <p class="text-secondary small mb-4 flex-grow-1">
                             "Please correct the grammar in my 300-word essay titled 'My Holiday'. Focus on Past Tense usage."
                         </p>
-                        
                         <hr class="opacity-10 my-3">
-
                         <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="reward-pill">
-                                <i class="fa-solid fa-clover"></i> 10
-                            </div>
-                            <button onclick="takeTask(this)" class="btn btn-take px-4 py-2">
-                                Take Task
-                            </button>
+                            <div class="reward-pill"><i class="fa-solid fa-clover"></i> 10</div>
+                            <button class="btn btn-take px-4 py-2" onclick="showToast('This is a demo task.')">Take Task</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Task 3 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card task-card p-3">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between mb-3 align-items-start">
-                            <span class="task-badge badge-sci">Physics</span>
-                            <span class="small text-secondary fw-bold"><i class="fa-regular fa-clock me-1"></i> Ends in 1d</span>
-                        </div>
-                        
-                        <h5 class="fw-bold text-clevr-dark mb-2">Newton's Laws Lab Report</h5>
-                        
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="https://ui-avatars.com/api/?name=Ryan+K&background=random" class="rounded-circle me-2" width="25" height="25">
-                            <span class="small text-secondary">Posted by <strong>Ryan</strong></span>
-                        </div>
-
-                        <p class="text-secondary small mb-4 flex-grow-1">
-                            "Help needed to write a conclusion based on Newton's Second Law practical data. Data is already in Excel."
-                        </p>
-                        
-                        <hr class="opacity-10 my-3">
-
-                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="reward-pill">
-                                <i class="fa-solid fa-clover"></i> 25
-                            </div>
-                            <button onclick="takeTask(this)" class="btn btn-take px-4 py-2">
-                                Take Task
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <!-- --- ACTIVE TASK SECTION (Hidden by default) --- -->
+        <div id="workingOnSection">
+            <h4 class="fw-bold text-clevr-dark mb-3">Tasks You Are Working On</h4>
+            
+            <div class="active-task-card">
+                <h5 class="fw-bold text-clevr-dark mb-2" id="activeTaskTitle">Loading...</h5>
+                <div class="student-pill mb-4">
+                    Student: <strong id="activeStudentName">Student</strong>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <div class="stepper-wrapper">
+                            <!-- Colored progress line -->
+                            <div class="progress-line-fill" id="progressFill" style="width: 50%;"></div>
+                            
+                            <!-- Step 1 -->
+                            <div class="stepper-item active">
+                                <div class="step-counter">1</div>
+                                <div class="step-name">Waiting</div>
+                            </div>
+                            <!-- Step 2 -->
+                            <div class="stepper-item active" id="step2">
+                                <div class="step-counter">2</div>
+                                <div class="step-name">Process</div>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="stepper-item" id="step3">
+                                <div class="step-counter">3</div>
+                                <div class="step-name">Done</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 text-lg-end mt-4 mt-lg-0" id="actionButtons">
+                        <button class="btn btn-chat px-4 py-2 me-2" onclick="window.location.href='chat_room.html?role=tutor'">
+                            <i class="fa-regular fa-comment-dots me-2"></i> Chat
+                        </button>
+                        <button class="btn btn-done px-4 py-2" onclick="markAsDone()">
+                            <i class="fa-solid fa-circle-check me-2"></i> Mark Done
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
+
+    <!-- NEW: "AWESOME WORK" MODAL (UPDATED DESIGN) -->
+    <div class="modal fade payment-modal" id="paymentSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <button type="button" class="btn-close modal-close-custom" data-bs-dismiss="modal" aria-label="Close"></button>
+                
+                <div class="mt-2">
+                    <!-- Icon: Clover -->
+                    <div class="icon-clover-bg">
+                        <i class="fa-solid fa-clover"></i>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h4 class="modal-title-custom">Awesome Work! 🎉</h4>
+                    
+                    <!-- Text -->
+                    <p class="modal-text mb-3">
+                        You successfully completed the task and earned:
+                    </p>
+                    
+                    <!-- Reward Box -->
+                    <div class="reward-box">
+                        <div class="reward-amount">
+                            +<span id="modalRewardAmount">15</span> <i class="fa-solid fa-clover"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Button -->
+                    <button type="button" class="btn-modal-action" data-bs-dismiss="modal" onclick="checkAndRenderTasks()">
+                        Collect Earnings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Simple Interaction Script
+        const TASK_KEY = 'activeTask';
+        const BALANCE_KEY = 'tutorBalance';
+
+        // --- 1. INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBalance();
+            checkAndRenderTasks();
+        });
+
+        // --- 2. LISTENER FOR REAL-TIME UPDATES ---
+        window.addEventListener('storage', (event) => {
+            if (event.key === TASK_KEY) {
+                console.log("Storage changed detected in Tutor View.");
+                checkAndRenderTasks();
+            }
+        });
+
+        // --- 3. BALANCE LOGIC ---
+        function initializeBalance() {
+            // Check if balance exists, if not set default 150
+            if (!localStorage.getItem(BALANCE_KEY)) {
+                localStorage.setItem(BALANCE_KEY, '150');
+            }
+            updateBalanceDisplay();
+        }
+
+        function updateBalanceDisplay() {
+            const currentBalance = localStorage.getItem(BALANCE_KEY);
+            const balanceEl = document.getElementById('tutorBalanceDisplay');
+            if (balanceEl) {
+                balanceEl.innerText = parseInt(currentBalance).toLocaleString();
+            }
+        }
+
+        // --- 4. CORE TASK LOGIC ---
+        function checkAndRenderTasks() {
+            const savedTaskStr = localStorage.getItem(TASK_KEY);
+            const workingSection = document.getElementById('workingOnSection');
+            
+            // Default: Remove any previously injected dynamic task from grid
+            const existingDynamic = document.getElementById('dynamicTaskCol');
+            if(existingDynamic) existingDynamic.remove();
+
+            if (!savedTaskStr) {
+                workingSection.style.display = 'none';
+                return;
+            }
+
+            const task = JSON.parse(savedTaskStr);
+
+            // LOGIC A: Task is WAITING -> Show in Available Tasks
+            if (task.status === 'waiting') {
+                workingSection.style.display = 'none';
+                renderAvailableCard(task);
+            } 
+            // LOGIC B: Task is PROCESS or DONE -> Show in Working On Section
+            else if (task.status === 'process' || task.status === 'done') {
+                renderActiveSection(task);
+            }
+        }
+
+        // Render Card in "Available Tasks" List
+        function renderAvailableCard(task) {
+            const grid = document.getElementById('taskGrid');
+            
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-4';
+            col.id = 'dynamicTaskCol'; 
+            
+            // 1. Handle Instructions
+            const descriptionText = task.description ? `"${task.description}"` : `"No specific instructions provided."`;
+
+            // 2. Handle Subject
+            let badgeClass = 'badge-gen';
+            let subjectText = 'General';
+            if (task.subject === 'math') { badgeClass = 'badge-math'; subjectText = 'Mathematics'; }
+            else if (task.subject === 'eng') { badgeClass = 'badge-eng'; subjectText = 'English'; }
+            else if (task.subject === 'sci') { badgeClass = 'badge-sci'; subjectText = 'Science'; }
+            else if (task.subject === 'prog') { badgeClass = 'badge-prog'; subjectText = 'Programming'; }
+
+            // 3. Handle Student Name
+            const studentName = task.studentName || 'Anonymous Student';
+            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(studentName)}&background=random`;
+
+            // 4. Handle Deadline
+            let timeText = "Just Now";
+            if (task.deadline) {
+                const deadlineDate = new Date(task.deadline);
+                const now = new Date();
+                const diffMs = deadlineDate - now;
+                const diffHrs = Math.ceil(diffMs / (1000 * 60 * 60));
+                
+                if (diffMs > 0) {
+                    if (diffHrs < 24) {
+                        timeText = `Ends in ${diffHrs}h`;
+                    } else {
+                        const diffDays = Math.ceil(diffHrs / 24);
+                        timeText = `Ends in ${diffDays}d`;
+                    }
+                } else {
+                    timeText = "Overdue";
+                }
+            }
+
+            col.innerHTML = `
+                <div class="card task-card p-3 new-task-anim">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between mb-3 align-items-start">
+                            <span class="task-badge ${badgeClass}">${subjectText}</span>
+                            <span class="small text-danger fw-bold"><i class="fa-regular fa-clock me-1"></i> ${timeText}</span>
+                        </div>
+                        
+                        <h5 class="fw-bold text-clevr-dark mb-2">${task.title}</h5>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="${avatarUrl}" class="rounded-circle me-2" width="25" height="25">
+                            <span class="small text-secondary">Posted by <strong>${studentName}</strong></span>
+                        </div>
+
+                        <p class="text-secondary small mb-4 flex-grow-1">
+                            ${descriptionText}
+                        </p>
+                        
+                        <hr class="opacity-10 my-3">
+
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="reward-pill">
+                                <i class="fa-solid fa-clover"></i> ${task.reward}
+                            </div>
+                            <button onclick="acceptTask()" class="btn btn-take px-4 py-2">
+                                Take Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            grid.prepend(col);
+        }
+
+        // Render "Tasks You Are Working On"
+        function renderActiveSection(task) {
+            const workingSection = document.getElementById('workingOnSection');
+            const titleEl = document.getElementById('activeTaskTitle');
+            const studentNameEl = document.getElementById('activeStudentName');
+            const fill = document.getElementById('progressFill');
+            const step3 = document.getElementById('step3');
+            const btns = document.getElementById('actionButtons');
+
+            // Update Content
+            titleEl.innerText = task.title;
+            studentNameEl.innerText = task.studentName || 'Student';
+
+            workingSection.style.display = 'block';
+
+            // Update Stepper Visuals
+            if (task.status === 'process') {
+                fill.style.width = '50%';
+                step3.classList.remove('active');
+                btns.innerHTML = `
+                    <button class="btn btn-chat px-4 py-2 me-2" onclick="window.location.href='chat_room.html?role=tutor'">
+                            <i class="fa-regular fa-comment-dots me-2"></i> Chat
+                    </button>
+                    <button class="btn btn-done px-4 py-2" onclick="markAsDone()">
+                        <i class="fa-solid fa-circle-check me-2"></i> Mark Done
+                    </button>
+                `;
+            } else if (task.status === 'done') {
+                fill.style.width = '100%';
+                step3.classList.add('active');
+                btns.innerHTML = `
+                    <div class="text-success fw-bold">
+                        <i class="fa-solid fa-check-double me-2"></i> Completed
+                    </div>
+                `;
+            }
+        }
+
+        // --- 5. ACTIONS & PAYMENT LOGIC ---
+
+        function acceptTask() {
+            const savedTaskStr = localStorage.getItem(TASK_KEY);
+            if(savedTaskStr) {
+                const task = JSON.parse(savedTaskStr);
+                
+                // Update Data
+                task.status = 'process';
+                task.tutorName = 'Gita Aulia';
+                
+                localStorage.setItem(TASK_KEY, JSON.stringify(task));
+                
+                showToast('Task accepted! Moved to "Working On" section.');
+                checkAndRenderTasks(); 
+            }
+        }
+
+        function markAsDone() {
+            const savedTaskStr = localStorage.getItem(TASK_KEY);
+            if(savedTaskStr) {
+                const task = JSON.parse(savedTaskStr);
+                
+                // 1. Mark task as done
+                task.status = 'done';
+                localStorage.setItem(TASK_KEY, JSON.stringify(task));
+                
+                // 2. Add Balance Logic
+                let currentBalance = parseInt(localStorage.getItem(BALANCE_KEY));
+                let reward = parseInt(task.reward) || 0; // Fallback if 0
+                
+                let newBalance = currentBalance + reward;
+                localStorage.setItem(BALANCE_KEY, newBalance.toString());
+                
+                // 3. Update UI Balance immediately
+                updateBalanceDisplay();
+
+                // 4. Update Modal Content
+                document.getElementById('modalRewardAmount').innerText = reward;
+
+                // 5. Show Payment Success Modal
+                const successModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
+                successModal.show();
+            }
+        }
+
         function showToast(message) {
             const toast = document.getElementById("toast");
             const msg = document.getElementById("toastMessage");
             msg.innerText = message;
             toast.className = "custom-toast show";
-            
-            // Auto hide after 3 seconds
-            setTimeout(() => { 
-                toast.className = toast.className.replace("show", ""); 
-            }, 3000);
-        }
-
-        function takeTask(btn) {
-            // Visual feedback
-            const originalText = btn.innerText;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-            
-            setTimeout(() => {
-                btn.innerText = "Accepted";
-                btn.classList.remove("btn-take");
-                btn.classList.add("btn-secondary");
-                btn.disabled = true;
-                
-                showToast("Task accepted! Check 'My Schedule' for details.");
-            }, 800);
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
         }
     </script>
 </body>

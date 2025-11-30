@@ -5,25 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLEVR - Task Market Center</title>
     
+    <!-- Google Fonts: Fredoka -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
     
-    <!-- CDN links -->
+    <!-- CDN links (Font Awesome & Bootstrap CSS) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- Fallback if local bootstrap is missing -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     
     <style>
-        /* --- 1. Base Styles (Same as Home) --- */
+        /* --- 1. Base Styles --- */
         :root {
             --clevr-purple: #827BFF;
             --clevr-dark: #011A5A;
             --clevr-orange: #FDA700;
             --clevr-light: #F3F4F6;
-            --clevr-green: #4ade80;
-            --clevr-pink: #F3A6CE;
+            --clevr-purple-light: #E0E7FF;
         }
 
         body {
@@ -34,7 +32,7 @@
 
         /* --- 2. Navbar Styling --- */
         .bg-clevr-purple { background-color: var(--clevr-purple) !important; }
-        .bg-clevr-orange { background-color: var(--clevr-orange) !important; } /* Added Orange Background */
+        .bg-clevr-orange { background-color: var(--clevr-orange) !important; }
         
         .text-clevr-purple { color: var(--clevr-purple) !important; }
         .text-clevr-dark { color: var(--clevr-dark) !important; }
@@ -44,7 +42,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
-        /* Navbar Links - Updated to match Home.html style */
         .nav-link {
             color: white !important;
             font-weight: 600;
@@ -54,116 +51,205 @@
         }
         .nav-link:hover { opacity: 0.8; }
         
-        /* Profile Styling */
         .profile-img-nav {
-            width: 45px;
-            height: 45px;
-            object-fit: cover;
-            border: 2px solid white;
-            border-radius: 50%;
+            width: 45px; height: 45px; object-fit: cover;
+            border: 2px solid white; border-radius: 50%;
         }
         .profile-text { line-height: 1.2; color: white; }
 
-        a.profile-section {
-            transition: opacity 0.2s;
-        }
-        a.profile-section:hover {
-            opacity: 0.8;
-        }
-
-        /* --- 3. Joki Form Styling --- */
+        /* --- 3. Form Styling --- */
         .hero-title {
-            color: var(--clevr-dark);
-            font-weight: 700;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            color: var(--clevr-dark); font-weight: 700; font-size: 2.5rem; margin-bottom: 1rem;
         }
-
         .hero-subtitle {
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #666;
+            max-width: 700px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6; color: #666;
         }
-
-        .upload-card {
-            background: white;
-            border-radius: 1rem;
+        
+        .upload-card, .status-card {
+            background: white; 
+            border-radius: 1rem; 
             border: 1px solid #f3f4f6;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
-            max-width: 600px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08); 
+            max-width: 600px; 
             margin: 0 auto;
         }
 
-        .form-label {
-            color: var(--clevr-dark);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .form-label { color: var(--clevr-dark); font-weight: 600; margin-bottom: 0.5rem; }
+        
+        /* Custom Form Control & Select */
+        .form-control-custom, .form-select-custom {
+            border-radius: 8px; border: 1px solid #dee2e6; padding: 0.75rem 1rem;
+            width: 100%; transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        /* Custom Form Control */
-        .form-control-custom, .form-select-custom {
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            color: #4b5563;
-            width: 100%;
-            background-color: #fff;
-            transition: border-color 0.2s, box-shadow 0.2s;
+        .form-select-custom {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23011A5A' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
+            cursor: pointer;
         }
 
         .form-control-custom:focus, .form-select-custom:focus {
-            border-color: var(--clevr-purple);
-            box-shadow: 0 0 0 4px rgba(130, 123, 255, 0.15);
-            outline: none;
+            border-color: var(--clevr-purple); box-shadow: 0 0 0 4px rgba(130, 123, 255, 0.15); outline: none;
         }
-
-        /* Submit Button */
+        
         .btn-submit {
-            background-color: var(--clevr-purple);
-            color: white;
-            font-weight: 700;
-            border-radius: 8px;
-            padding: 12px;
-            transition: all 0.3s ease;
-            border: none;
-            width: 100%;
-            margin-top: 1rem;
+            background-color: var(--clevr-purple); color: white; font-weight: 700;
+            border-radius: 8px; padding: 12px; transition: all 0.3s ease; border: none; width: 100%; margin-top: 1rem;
         }
-
         .btn-submit:hover {
-            background-color: #6f68fc;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(130, 123, 255, 0.4);
+            background-color: #6f68fc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(130, 123, 255, 0.4);
         }
 
-        /* Notification Toast */
+        /* --- 4. Progress Tracker Styles (FIXED ALIGNMENT) --- */
+        .progress-container {
+            position: relative; 
+            display: flex; 
+            justify-content: space-between;
+            align-items: flex-start; /* Mengunci alignment ke atas agar sejajar */
+            margin: 2rem 0; 
+            z-index: 1;
+        }
+        
+        /* Set lebar tetap untuk setiap step agar center-nya presisi */
+        .progress-step {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            background: transparent; 
+            z-index: 2;
+            width: 100px; /* Fixed width: kunci agar tidak offside */
+        }
+
+        /* UPDATED: Wrapper untuk track agar fill tidak offside */
+        .progress-track {
+            position: absolute; 
+            top: 25px; /* Tengah lingkaran 50px */
+            left: 50px; /* Tepat di tengah lingkaran pertama (width 100px / 2) */
+            right: 50px; /* Tepat di tengah lingkaran terakhir */
+            height: 6px;
+            background-color: #f3f4f6;
+            transform: translateY(-50%); 
+            z-index: -1; /* Di belakang lingkaran */
+            border-radius: 10px;
+            overflow: hidden; /* Mencegah apapun keluar dari track */
+        }
+        
+        .progress-fill {
+            height: 100%; 
+            width: 0%;
+            background-color: var(--clevr-purple); 
+            border-radius: 10px; 
+            transition: width 0.5s ease;
+        }
+
+        .step-circle {
+            width: 50px; height: 50px;
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; 
+            font-weight: 800; font-size: 1.2rem; margin-bottom: 0.8rem;
+            border: 4px solid #e5e7eb; background-color: white; color: #d1d5db;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .step-label {
+            font-size: 0.8rem; font-weight: 800; color: #d1d5db;
+            text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.3s ease;
+            text-align: center;
+        }
+
+        .progress-step.active .step-circle {
+            background-color: var(--clevr-purple); border-color: var(--clevr-purple); 
+            color: white; box-shadow: 0 4px 15px rgba(130, 123, 255, 0.3); transform: scale(1.05);
+        }
+        .progress-step.active .step-label { color: var(--clevr-purple); }
+
+        .reward-pill {
+            background-color: #dcfce7; color: #16a34a; padding: 5px 15px;
+            border-radius: 20px; font-weight: 700; display: inline-flex; align-items: center;
+        }
+
+        /* Status Panels */
+        .status-panel { display: none; animation: fadeIn 0.5s; }
+        .status-panel.active { display: block; }
+
+        .status-alert-waiting {
+            background-color: #fef9c3; color: #854d0e; border-radius: 10px;
+            padding: 1rem; font-weight: 600; font-size: 0.95rem;
+        }
+
+        .tutor-found-box {
+            background-color: var(--clevr-purple-light); border-radius: 10px;
+            padding: 1rem; color: var(--clevr-purple); font-weight: 600; margin-bottom: 1rem;
+        }
+
+        .btn-chat {
+            background-color: var(--clevr-purple); color: white; border: none;
+            width: 100%; border-radius: 10px; padding: 12px; font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-chat:hover { background-color: #6f68fc; color: white; }
+        
+        .btn-finish {
+            background-color: #10b981; color: white; border: none;
+            width: 100%; border-radius: 10px; padding: 12px; font-weight: 700; margin-top: 10px;
+            transition: 0.3s;
+        }
+        .btn-finish:hover { background-color: #059669; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .custom-toast {
             visibility: hidden; min-width: 300px; background-color: var(--clevr-dark);
             color: #fff; text-align: center; border-radius: 50px; padding: 16px 24px;
             position: fixed; z-index: 1050; left: 50%; top: -100px; transform: translateX(-50%);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); opacity: 0; transition: all 0.5s;
-            font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: all 0.5s; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
         .custom-toast.show { visibility: visible; opacity: 1; top: 40px; }
         .text-success-custom { color: #4ade80 !important; }
-        
-        /* Wallet & Animation */
-        .clover-icon { 
-            color: #4ade80; 
-        }
+        .clover-icon { color: #4ade80; }
+        .btn-animate:hover { transform: scale(1.02); }
 
-        .btn-animate {
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        /* --- NEW MODAL STYLES --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            animation: fadeIn 0.3s;
         }
-        .btn-animate:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        .modal-content-custom {
+            background: white; width: 90%; max-width: 400px;
+            border-radius: 20px; padding: 30px; text-align: center;
+            position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
+        .modal-icon-bg {
+            width: 80px; height: 80px; background: #E0E7FF;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; color: var(--clevr-purple); font-size: 2rem;
+        }
+        .modal-title {
+            color: var(--clevr-dark); font-weight: 800; font-size: 1.5rem; margin-bottom: 0.5rem;
+        }
+        .modal-desc {
+            color: #6b7280; font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem;
+        }
+        .btn-modal-action {
+            background: var(--clevr-dark); color: white; width: 100%;
+            padding: 12px; border-radius: 10px; border: none; font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-modal-action:hover { background-color: #0d2a75; }
+        .close-modal-x {
+            position: absolute; top: 15px; right: 20px; font-size: 1.5rem;
+            color: #999; cursor: pointer; background: none; border: none;
+        }
+        .close-modal-x:hover { color: #333; }
+
     </style>
 </head>
 <body>
@@ -174,40 +260,46 @@
         <span id="toastMessage">Assignment uploaded successfully!</span>
     </div>
 
-    <!-- NAVBAR FIXED & ALIGNED (MATCHING HOME.HTML) -->
+    <!-- PAYMENT SENT MODAL -->
+    <div id="paymentModal" class="modal-overlay">
+        <div class="modal-content-custom">
+            <button class="close-modal-x" onclick="closePaymentModal()">&times;</button>
+            
+            <div class="modal-icon-bg">
+                <i class="fa-regular fa-paper-plane"></i>
+            </div>
+            
+            <h3 class="modal-title">Payment Sent! 💸</h3>
+            <p class="modal-desc">
+                The task is complete! We have automatically transferred the Clovr reward to the Tutor's balance.
+            </p>
+            
+            <button class="btn-modal-action" onclick="closePaymentModal()">Okay, Great!</button>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
     <nav class="navbar navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
         <div class="container-fluid d-flex align-items-center justify-content-between">
-            
-            <!-- 1. LEFT GROUP: Logo + Menu -->
             <div class="d-flex align-items-center">
-                <!-- Logo -->
-                <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">
-                    CLEVR
-                </a>
-
-                <!-- Menu Links (Horizontal - No Dropdown) -->
+                <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="home.html">CLEVR</a>
                 <ul class="navbar-nav d-flex flex-row gap-4 mb-0">
                     <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
-                    <!-- Set Opacity 1 for Active Page -->
-                    <li class="nav-item"><a class="nav-link" style="opacity:1;" href="jokitugas.html">Task Market</a></li>
+                    <li class="nav-item"><a class="nav-link" style="opacity:1;" href=" ">Task Market</a></li>
                     <li class="nav-item"><a class="nav-link" href="findtutor.html">Find Tutor</a></li>
                     <li class="nav-item"><a class="nav-link" href="myclasses.html">My Classes</a></li>
                 </ul>
             </div>
-
-            <!-- 2. RIGHT GROUP: Wallet + Profile -->
             <div class="d-flex align-items-center gap-3">
-                 <!-- Wallet Pill -->
                  <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 shadow-sm" style="height: 45px;">
                     <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
-                    <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
-                    <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
+                    <span id="wallet-balance" class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    <button onclick="window.location.href='topup.html'" class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
-
-                <!-- Profile Link -->
-                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                <a href="profile.html" class="d-flex align-items-center profile-section text-decoration-none">
+                    <!-- CHANGED: Replaced local 'foto/user1.png' with a placeholder URL for display purposes -->
                     <img src="foto/user1.png" alt="Profile" class="profile-img-nav shadow-sm me-2">
                     <div class="profile-text d-none d-lg-block">
                         <div class="fw-bold text-white">Hayley Williams</div>
@@ -215,13 +307,11 @@
                     </div>
                 </a>
             </div>
-
         </div>
     </nav>
 
     <main class="container py-5">
         
-        <!-- Hero Section (Centered Title) -->
         <div class="text-center mx-auto mb-5" style="max-width: 768px;">
             <h2 class="hero-title">Need Assignment Help?</h2>
             <p class="hero-subtitle">
@@ -229,17 +319,13 @@
             </p>
         </div>
 
-        <!-- Upload Form Card -->
-        <div class="upload-card p-4 p-md-5">
+        <!-- UPLOAD FORM CARD -->
+        <div class="upload-card p-4 p-md-5 mb-5">
             <form id="uploadForm" onsubmit="handleUpload(event)">
-                
-                <!-- Assignment Title -->
                 <div class="mb-3">
-                    <label for="judulTugas" class="form-label">Task Market</label>
-                    <input type="text" class="form-control-custom" id="judulTugas" placeholder="Example: Math Homework Page 50" required>
+                    <label for="judulTugas" class="form-label">Task Title</label>
+                    <input type="text" class="form-control-custom" id="judulTugas" placeholder="Example: Linear Algebra Problems (5 Qs)" required>
                 </div>
-
-                <!-- Subject -->
                 <div class="mb-3">
                     <label for="mapel" class="form-label">Subject</label>
                     <select class="form-select-custom" id="mapel">
@@ -247,68 +333,309 @@
                         <option value="math">Mathematics</option>
                         <option value="eng">English</option>
                         <option value="sci">Science</option>
-                        <option value="hist">History</option>
-                        <option value="other">Others</option>
+                        <option value="prog">Programming</option>
                     </select>
                 </div>
-
-                <!-- Deadline -->
                 <div class="mb-3">
-                    <label for="deadline" class="form-label">Submission Deadline</label>
+                    <label for="deadline" class="form-label">Deadline</label>
                     <input type="datetime-local" class="form-control-custom" id="deadline" required>
                 </div>
-
-                <!-- Description -->
                 <div class="mb-3">
-                    <label for="deskripsi" class="form-label">Description & Instructions</label>
-                    <textarea class="form-control-custom" id="deskripsi" rows="4" placeholder="Explain your assignment details here..."></textarea>
+                    <label for="deskripsi" class="form-label">Instructions</label>
+                    <textarea class="form-control-custom" id="deskripsi" rows="3" placeholder="Explain your assignment details here..."></textarea>
                 </div>
-
-                <!-- Reward -->
                 <div class="mb-4">
                     <label for="reward" class="form-label">Reward (Clovr)</label>
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0" style="border-radius: 8px 0 0 8px; border-color: #dee2e6;">
                             <i class="fa-solid fa-clover text-success"></i>
                         </span>
-                        <input type="number" class="form-control-custom" id="reward" placeholder="10" style="border-radius: 0 8px 8px 0; border-left: 0;">
+                        <input type="number" class="form-control-custom" id="reward" placeholder="7" min="7" required style="border-radius: 0 8px 8px 0; border-left: 0;">
                     </div>
                     <div class="form-text text-secondary small mt-2">
-                        <i class="fa-solid fa-circle-info me-1"></i> Minimum 10 Clovr to attract helpers.
+                        <i class="fa-solid fa-circle-info me-1"></i> Minimum 7 Clovr to attract helpers.
                     </div>
                 </div>
-
-                <!-- Submit Button -->
                 <button type="submit" class="btn-submit">
                     <i class="fa-solid fa-paper-plane me-2"></i> Upload Assignment Now
                 </button>
             </form>
         </div>
 
+        <!-- DYNAMIC SECTION: My Posted Tasks -->
+        <div id="postedTasksSection" class="mt-5 pt-4" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4 mx-auto" style="max-width: 600px;">
+                <h4 class="fw-bold text-clevr-dark mb-0">My Posted Tasks</h4>
+                <button onclick="clearTask()" class="btn btn-sm btn-outline-danger">Clear/Cancel</button>
+            </div>
+            
+            <!-- STATUS CARD -->
+            <div class="status-card p-4 p-md-5">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold text-clevr-dark mb-0" id="displayTitle">Task Title</h5>
+                    <div class="reward-pill">
+                        <i class="fa-solid fa-clover me-2"></i> <span id="displayReward">0</span>
+                    </div>
+                </div>
+
+                <!-- Progress Tracker -->
+                <div class="progress-container">
+                    <!-- UPDATED STRUCTURE: Fill inside Track -->
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div> 
+                    </div>
+                    
+                    <div class="progress-step active" id="step1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">WAITING</div>
+                    </div>
+
+                    <div class="progress-step" id="step2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">PROCESS</div>
+                    </div>
+
+                    <div class="progress-step" id="step3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">DONE</div>
+                    </div>
+                </div>
+
+                <!-- STATE 1: Waiting Alert -->
+                <div id="alertWaiting" class="status-panel active">
+                    <div class="status-alert-waiting d-flex align-items-center">
+                        <i class="fa-solid fa-circle-info me-2 text-warning fs-5"></i>
+                        <span>Waiting for a tutor to pick this up...</span>
+                    </div>
+                    <small class="text-muted d-block mt-2 fst-italic text-center">
+                        *Dev Note: Open console and type <br>
+                        <code>changeTaskStatus('process')</code> to simulate Tutor acceptance.
+                    </small>
+                </div>
+
+                <!-- STATE 2: Process / Tutor Found -->
+                <div id="alertProcess" class="status-panel">
+                    <div class="tutor-found-box d-flex align-items-center">
+                        <span class="fw-bold"><span style="color:#6f68fc" id="tutorNameDisplay">Tutor</span> is working on this...</span>
+                    </div>
+                    <button class="btn-chat shadow-sm">
+                        Open Chat & Discussion
+                    </button>
+                    <!-- UPDATED: Button now calls completeTask() -->
+                     <button onclick="completeTask()" class="btn-finish shadow-sm mt-2">
+                        Mark as Done
+                    </button>
+                </div>
+
+                 <!-- STATE 3: Done -->
+                 <div id="alertDone" class="status-panel">
+                    <div class="alert alert-success d-flex align-items-center fw-bold">
+                        <i class="fa-solid fa-check-circle me-2 fs-5"></i>
+                        Task Completed! Reward has been sent.
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
     </main>
 
-    <!-- CDN JS -->
-    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script>
-        // Function to show toast notification
+        // --- KEY FOR LOCALSTORAGE ---
+        const TASK_KEY = 'activeTask';
+
+        // --- 1. INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updateWalletUI();
+            checkActiveTask(); // Check if there's a saved task on load
+        });
+
+        // --- 2. WALLET LOGIC ---
+        function updateWalletUI() {
+            const balance = localStorage.getItem('clovrBalance') ? parseInt(localStorage.getItem('clovrBalance')) : 1250;
+            const walletElement = document.getElementById('wallet-balance');
+            if(walletElement) walletElement.innerText = balance.toLocaleString();
+        }
+
+        // --- 3. TASK LOGIC ---
+
+        // Check LocalStorage & Render
+        function checkActiveTask() {
+            const savedTask = localStorage.getItem(TASK_KEY);
+            if (savedTask) {
+                const task = JSON.parse(savedTask);
+                renderTaskUI(task);
+            } else {
+                document.getElementById('postedTasksSection').style.display = 'none';
+            }
+        }
+
+        // Render UI based on Task State
+        function renderTaskUI(task) {
+            // Populate Data
+            document.getElementById('displayTitle').innerText = task.title;
+            document.getElementById('displayReward').innerText = task.reward;
+            
+            // Show Section
+            document.getElementById('postedTasksSection').style.display = 'block';
+
+            // Reset Classes
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const fill = document.getElementById('progressFill');
+            const alertWait = document.getElementById('alertWaiting');
+            const alertProc = document.getElementById('alertProcess');
+            const alertDone = document.getElementById('alertDone');
+
+            step2.classList.remove('active');
+            step3.classList.remove('active');
+            alertWait.classList.remove('active');
+            alertProc.classList.remove('active');
+            alertDone.classList.remove('active');
+
+            // Handle States
+            if (task.status === 'waiting') {
+                fill.style.width = '0%';
+                alertWait.classList.add('active');
+            } 
+            else if (task.status === 'process') {
+                fill.style.width = '50%'; // This goes to the center of Step 2
+                step2.classList.add('active');
+                alertProc.classList.add('active');
+                if(task.tutorName) {
+                    document.getElementById('tutorNameDisplay').innerText = task.tutorName;
+                }
+            } 
+            else if (task.status === 'done') {
+                fill.style.width = '100%';
+                step2.classList.add('active');
+                step3.classList.add('active');
+                alertDone.classList.add('active');
+            }
+        }
+
+        // Handle Upload Form Submit
+        function handleUpload(e) {
+            e.preventDefault();
+
+            // Get Form Data
+            const title = document.getElementById('judulTugas').value;
+            const subject = document.getElementById('mapel').value; // Save Subject
+            const deadline = document.getElementById('deadline').value; // Save Deadline
+            const description = document.getElementById('deskripsi').value; // Save Instructions (NEW!)
+            const reward = document.getElementById('reward').value;
+
+            // Get User Name from Profile (Navbar)
+            // Select element with class .profile-text and find .fw-bold inside it
+            const studentNameElement = document.querySelector('.profile-text .fw-bold');
+            const studentName = studentNameElement ? studentNameElement.innerText : 'Unknown Student';
+
+            // Create Task Object
+            const newTask = {
+                id: Date.now(),
+                title: title,
+                subject: subject,
+                deadline: deadline,
+                description: description, // Saved to LocalStorage
+                reward: reward,
+                studentName: studentName, // Saved User Name
+                status: 'waiting', // Default status
+                tutorName: null
+            };
+
+            // Save to LocalStorage
+            localStorage.setItem(TASK_KEY, JSON.stringify(newTask));
+
+            // Show Toast & UI
+            showToast("Assignment uploaded successfully! Waiting for help...");
+            renderTaskUI(newTask);
+            
+            // Scroll to view
+            document.getElementById('postedTasksSection').scrollIntoView({ behavior: 'smooth' });
+
+            // Reset Form
+            e.target.reset();
+        }
+
+        // Clear Task (For Demo Purpose)
+        function clearTask() {
+            localStorage.removeItem(TASK_KEY);
+            location.reload();
+        }
+
+        // --- NEW FUNCTION: COMPLETE TASK (Deduct Balance + Modal) ---
+        function completeTask() {
+            // 1. Get Task
+            const savedTask = localStorage.getItem(TASK_KEY);
+            if (!savedTask) return;
+            const task = JSON.parse(savedTask);
+            const reward = parseInt(task.reward) || 0;
+
+            // 2. Deduct Balance
+            let currentBalance = parseInt(localStorage.getItem('clovrBalance')) || 1250;
+            
+            // Logic to prevent negative balance (optional, but good practice)
+            if (currentBalance >= reward) {
+                currentBalance -= reward;
+                localStorage.setItem('clovrBalance', currentBalance);
+                updateWalletUI(); // Update Navbar immediately
+            } else {
+                // If this were real, we might block it. For demo, we just proceed or warn.
+                console.warn("Balance insufficient technically, but proceeding for demo.");
+                currentBalance = 0; // Or allow negative
+                localStorage.setItem('clovrBalance', currentBalance);
+                updateWalletUI();
+            }
+
+            // 3. Update Status
+            changeTaskStatus('done');
+
+            // 4. Show Modal
+            const modal = document.getElementById('paymentModal');
+            modal.style.display = 'flex';
+        }
+
+        // Close Modal
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        // --- 4. REAL-TIME INTEGRATION (LISTENER) ---
+        // This listens for changes in LocalStorage made by OTHER pages/tabs
+        window.addEventListener('storage', (event) => {
+            if (event.key === TASK_KEY) {
+                console.log("Storage changed! Updating UI...");
+                checkActiveTask(); // Re-render UI immediately
+            }
+        });
+
+        // --- 5. DEV HELPER FUNCTION ---
+        // Run this in Console to simulate Tutor accepting the task
+        // Example: changeTaskStatus('process', 'Gita Aulia')
+        window.changeTaskStatus = function(status, tutorName = 'Gita Aulia') {
+            const savedTask = localStorage.getItem(TASK_KEY);
+            if (savedTask) {
+                const task = JSON.parse(savedTask);
+                task.status = status;
+                if(status === 'process') task.tutorName = tutorName;
+                
+                localStorage.setItem(TASK_KEY, JSON.stringify(task));
+                checkActiveTask(); // Manually trigger update for current tab
+                console.log(`Task status updated to: ${status}`);
+            } else {
+                console.warn("No active task found to update.");
+            }
+        };
+
+        // Helper Toast
         function showToast(message) {
             const toast = document.getElementById("toast");
             const msg = document.getElementById("toastMessage");
             msg.innerText = message;
             toast.className = "custom-toast show";
             setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-        }
-
-        // Handle Upload Form
-        function handleUpload(e) {
-            e.preventDefault();
-            
-            // Show Success
-            showToast("Assignment uploaded successfully! Waiting for help...");
-            
-            // Reset Form
-            e.target.reset();
         }
     </script>
 </body>

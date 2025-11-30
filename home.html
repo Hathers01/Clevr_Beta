@@ -268,8 +268,12 @@
                  <!-- Wallet Pill -->
                  <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 shadow-sm" style="height: 45px;">
                     <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
-                    <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
-                    <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
+                    
+                    <!-- UPDATE: Added ID to wallet balance for JS targeting -->
+                    <span id="wallet-balance" class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    
+                    <!-- UPDATE: Added onclick to redirect to topup.html -->
+                    <button onclick="window.location.href='topup.html'" class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -306,7 +310,7 @@
             <div class="card upcoming-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between">
                 <div class="mb-3 mb-md-0">
                     <div class="small text-white-50 fw-bold mb-1 text-uppercase">Next Class:</div>
-                    <h2 class="fw-bold mb-1">Mathematics</h2>
+                    <h2 class="fw-bold mb-1">Mathematics - Fractions</h2>
                     <p class="mb-0 fs-5 opacity-75">Today, 15:00 WIB with Tutor Dara</p>
                 </div>
                 <div>
@@ -334,14 +338,14 @@
                                     <h5 class="fw-bold text-clevr-dark mb-1 tutor-name">Marvelius Harven</h5>
                                 </div>
                                 <p class="small text-secondary fw-bold mb-2 tutor-subject">
-                                    Content Creator<br>(Junior High)
+                                    English Native<br>(Junior High)
                                     <span class="text-warning ms-1"><i class="fa-solid fa-star"></i> 5.0</span>
                                 </p>
                                 <div class="d-flex align-items-center mb-3">
                                     <i class="fa-solid fa-clover clover-icon me-2"></i>
                                     <span class="fw-bold text-clevr-dark small">7 Clovr / Session</span>
                                 </div>
-                                <button onclick="openBookingModal('Marvelius Harven', 'Social', 'foto/tutor2.jpeg')" class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
+                                <button onclick="openBookingModal('Marvelius Harven', 'English Native', 'foto/tutor2.jpeg')" class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
                                     View & Book
                                 </button>
                             </div>
@@ -361,14 +365,14 @@
                                     <h5 class="fw-bold text-clevr-dark mb-1 tutor-name">Muhammad Athalladithya</h5>
                                 </div>
                                 <p class="small text-secondary fw-bold mb-2 tutor-subject">
-                                    Programmer<br>(Junior High)
+                                    History Expert<br>(Junior High)
                                     <span class="text-warning ms-1"><i class="fa-solid fa-star"></i> 5.0</span>
                                 </p>
                                 <div class="d-flex align-items-center mb-3">
                                     <i class="fa-solid fa-clover clover-icon me-2"></i>
                                     <span class="fw-bold text-clevr-dark small">7 Clovr / Session</span>
                                 </div>
-                                <button onclick="openBookingModal('Muhammad Athalladithya', 'Programming', 'foto/tutor4.png')" class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
+                                <button onclick="openBookingModal('Muhammad Athalladithya', 'History Expert', 'foto/tutor4.png')" class="btn bg-clevr-orange text-white fw-bold w-100 btn-animate border-0 rounded-3">
                                     View & Book
                                 </button>
                             </div>
@@ -421,6 +425,19 @@
 
     <script src="js/bootstrap.bundle.min.js"></script>
     <script>
+        // --- WALLET LOGIC (SYNC WITH TOPUP) ---
+        function updateWalletUI() {
+            // Ambil saldo dari localStorage, atau default 1250
+            const balance = localStorage.getItem('clovrBalance') ? parseInt(localStorage.getItem('clovrBalance')) : 1250;
+            const walletElement = document.getElementById('wallet-balance');
+            if(walletElement) {
+                walletElement.innerText = balance.toLocaleString();
+            }
+        }
+
+        // Panggil saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', updateWalletUI);
+
         // --- SEARCH LOGIC ---
         const searchInput = document.getElementById('searchInput');
         const resultsContainer = document.getElementById('searchResults');
@@ -494,7 +511,6 @@
             if (type === 'success') {
                 iconElement.classList.add('fa-circle-check', 'text-success-custom');
             } else if (type === 'error') {
-                 // UPDATE: New error style for duplicate booking
                  iconElement.classList.add('fa-circle-exclamation', 'text-danger');
             } else {
                 iconElement.classList.add('fa-rocket', 'text-clevr-orange');
@@ -505,20 +521,18 @@
             toastTimeout = setTimeout(() => toast.className = toast.className.replace("show", ""), 3000);
         }
 
-        // --- NEW: BOOKING & LOCAL STORAGE LOGIC ---
+        // --- BOOKING & LOCAL STORAGE LOGIC ---
         let bookingModal;
-        let selectedTutorData = {}; // Store selected tutor data temporarily
-        let selectedTimeData = null; // Store selected time
+        let selectedTutorData = {}; 
+        let selectedTimeData = null; 
 
         function openBookingModal(name, subject, img) {
-            // Save data to global variable
             selectedTutorData = {
                 name: name,
                 subject: subject,
-                img: img || 'foto/tutor_default.png' // Fallback image
+                img: img || 'foto/tutor_default.png'
             };
             
-            // Reset Time Selection
             selectedTimeData = null;
             document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
 
@@ -532,34 +546,40 @@
             document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
             element.classList.add('selected');
             
-            // Capture text (e.g., "Tomorrow\n10:00") and format it
             const day = element.querySelector('.small').innerText;
             const time = element.querySelector('.text-clevr-purple').innerText;
             selectedTimeData = `${day}, ${time}`;
         }
 
         function confirmBooking() {
-            // Validasi apakah waktu sudah dipilih
             if (!selectedTimeData) {
                 alert("Please select a time slot first!");
                 return;
             }
 
-            // 1. Ambil data lama dari LocalStorage (jika ada)
+            // 1. Ambil data booking & saldo
             let existingClasses = JSON.parse(localStorage.getItem('myClasses')) || [];
+            let currentBalance = localStorage.getItem('clovrBalance') ? parseInt(localStorage.getItem('clovrBalance')) : 1250;
+            const bookingCost = 7;
 
-            // UPDATE: Check for duplicate booking
+            // Check Duplicate
             const isDuplicate = existingClasses.some(item => item.tutorName === selectedTutorData.name);
-
             if (isDuplicate) {
                 if (bookingModal) bookingModal.hide();
                 setTimeout(() => showNotification("You have already booked this tutor!", 'error'), 500);
                 return;
             }
 
+            // UPDATE: Check Balance
+            if (currentBalance < bookingCost) {
+                if (bookingModal) bookingModal.hide();
+                setTimeout(() => showNotification("Insufficient Clovr Balance!", 'error'), 500);
+                return;
+            }
+
             // 2. Buat objek booking baru
             const newClass = {
-                id: Date.now(), // Unique ID based on timestamp
+                id: Date.now(), 
                 tutorName: selectedTutorData.name,
                 subject: selectedTutorData.subject,
                 image: selectedTutorData.img,
@@ -568,20 +588,19 @@
                 cost: '7 Clovr'
             };
 
-            // 3. Tambahkan ke array
+            // 3. Simpan Booking & Update Saldo
             existingClasses.push(newClass);
-
-            // 4. Simpan kembali ke LocalStorage
             localStorage.setItem('myClasses', JSON.stringify(existingClasses));
+            
+            // Kurangi Saldo
+            currentBalance -= bookingCost;
+            localStorage.setItem('clovrBalance', currentBalance);
+            updateWalletUI(); // Update tampilan langsung
 
-            // 5. Tutup Modal & Tampilkan Notifikasi Sukses
+            // 5. Tutup Modal & Notifikasi
             if (bookingModal) bookingModal.hide();
             setTimeout(() => showNotification("Booking Successful! Class added to schedule.", 'success'), 500);
-            
-            // Optional: Log untuk debugging
-            console.log("Class saved:", newClass);
         }
     </script>
 </body>
-
 </html>

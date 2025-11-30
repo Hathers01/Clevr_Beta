@@ -303,8 +303,8 @@
             <div class="d-flex align-items-center gap-3">
                  <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 shadow-sm" style="height: 45px;">
                     <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
-                    <span class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
-                    <button class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
+                    <span id="wallet-balance" class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    <button onclick="window.location.href='topup.html'" class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -368,6 +368,18 @@
     <script src="js/bootstrap.bundle.min.js"></script>
 
     <script>
+        // --- WALLET LOGIC (SYNC WITH TOPUP) ---
+        function updateWalletUI() {
+            // Ambil saldo dari localStorage, atau default 1250
+            const balance = localStorage.getItem('clovrBalance') ? parseInt(localStorage.getItem('clovrBalance')) : 1250;
+            const walletElement = document.getElementById('wallet-balance');
+            if(walletElement) {
+                walletElement.innerText = balance.toLocaleString();
+            }
+        }
+        // Panggil saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', updateWalletUI);
+
         function showNotification() {
             const toast = document.getElementById("redirectToast");
             toast.className = "custom-toast show";
