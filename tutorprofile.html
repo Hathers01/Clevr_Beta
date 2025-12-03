@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLEVR - My Profile</title>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     
     <style>
@@ -253,14 +250,12 @@
 </head>
 <body>
 
-    <!-- Notification Toast -->
     <div id="actionToast" class="custom-toast">
         <i class="fa-solid fa-circle-check text-success fs-5"></i>
         <span id="toastMessage">Saved successfully!</span>
     </div>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-orange px-4 px-md-5 sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="tutorhome.html">
                 CLEVR
@@ -269,7 +264,6 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- NAVBAR MENU: Adjusted to match home_tutor.html -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="tutorhome.html">Home</a></li>
                     <li class="nav-item">
@@ -279,14 +273,12 @@
                     <li class="nav-item"><a class="nav-link" href="tutorearnings.html">Earnings & History</a></li>
                 </ul>
                 
-                <!-- RIGHT SECTION: Active Profile State -->
                 <div class="d-flex align-items-center profile-section">
                     <img src="foto/tutor3.jpeg" alt="Profile" class="rounded-circle me-3 shadow-sm profile-nav-img">
                     <div class="profile-text d-none d-md-block text-white me-4">
-                        <div class="fw-bold">Gita Aulia</div>
+                        <div class="fw-bold" id="nav-name-display">Gita Aulia</div>
                         <div class="small text-white-50">Science Wizard</div>
                     </div>
-                    <!-- Logout Button -->
                     <button class="btn btn-logout btn-sm rounded-pill fw-bold shadow-sm" onclick="confirmLogout()">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
                     </button>
@@ -295,10 +287,8 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container py-5">
         
-        <!-- 1. Profile Header Card -->
         <div class="profile-header-card">
             <div class="profile-banner"></div>
             
@@ -309,12 +299,13 @@
             <div class="profile-info-row d-flex flex-column flex-md-row justify-content-between align-items-md-start">
                 <div>
                     <h2 class="fw-bold text-clevr-dark mb-1">
-                        Gita Aulia <i class="fa-solid fa-circle-check text-primary fs-5 ms-1" title="Verified"></i>
+                        <span id="tutor-name-display">Gita Aulia</span> 
+                        <i class="fa-solid fa-circle-check text-primary fs-5 ms-1" title="Verified"></i>
                     </h2>
-                    <p class="text-secondary fs-5 mb-2 fw-bold">Science Wizard</p>
+                    <p class="text-secondary fs-5 mb-2 fw-bold" id="tutor-tagline-display">Science Wizard</p>
                     
                     <div class="d-flex align-items-center gap-3 text-secondary mb-3 justify-content-center justify-content-md-start">
-                        <span><i class="fa-solid fa-location-dot me-1"></i> Jakarta, Indonesia</span>
+                        <span><i class="fa-solid fa-location-dot me-1"></i> <span id="tutor-location-display">Jakarta, Indonesia</span></span>
                         <span><i class="fa-solid fa-globe me-1"></i> Online & Offline</span>
                     </div>
                 </div>
@@ -323,22 +314,19 @@
                     <button class="btn btn-preview px-4 py-2" onclick="showToast('Preview Mode: ON')">
                         <i class="fa-regular fa-eye me-2"></i> Preview
                     </button>
-                    <button class="btn btn-edit-profile px-4 py-2 btn-animate" onclick="showToast('Opening Profile Editor...')">
+                    <button class="btn btn-edit-profile px-4 py-2 btn-animate" data-bs-toggle="modal" data-bs-target="#editTutorModal">
                         <i class="fa-solid fa-pen-to-square me-2"></i> Edit Profile
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. Grid Layout -->
         <div class="row g-4">
             
-            <!-- Left Column: Details -->
             <div class="col-lg-8">
-                <!-- About Me -->
                 <div class="content-card">
                     <h5 class="section-title"><i class="fa-solid fa-user-pen text-clevr-purple"></i> About Me</h5>
-                    <p class="text-secondary" style="line-height: 1.6;">
+                    <p class="text-secondary" style="line-height: 1.6;" id="tutor-about-display">
                         Hello! I'm Gita, a passionate <strong>Science Wizard</strong>. A Pure Physics graduate who believes that science is fun, not scary!
                     </p>
                     <p class="text-secondary mb-0" style="line-height: 1.6;">
@@ -346,7 +334,6 @@
                     </p>
                 </div>
 
-                <!-- Subjects & Skills -->
                 <div class="content-card">
                     <h5 class="section-title"><i class="fa-solid fa-flask text-clevr-purple"></i> Science Specialization</h5>
                     <div class="mb-4">
@@ -367,7 +354,6 @@
                     </div>
                 </div>
 
-                <!-- Education -->
                 <div class="content-card">
                     <h5 class="section-title"><i class="fa-solid fa-graduation-cap text-clevr-purple"></i> Education</h5>
                     <div class="d-flex gap-3 mb-3">
@@ -383,10 +369,8 @@
                 </div>
             </div>
 
-            <!-- Right Column: Sidebar -->
             <div class="col-lg-4">
                 
-                <!-- Stats Summary -->
                 <div class="content-card bg-clevr-orange text-white">
                     <h5 class="fw-bold mb-4"><i class="fa-solid fa-chart-simple me-2"></i> Statistics</h5>
                     
@@ -406,7 +390,6 @@
                     </div>
                 </div>
 
-                <!-- Video Intro Placeholder -->
                 <div class="content-card p-0 overflow-hidden">
                     <div class="bg-light d-flex align-items-center justify-content-center flex-column" style="height: 200px;">
                         <i class="fa-solid fa-play-circle text-clevr-orange" style="font-size: 4rem; opacity: 0.8; cursor: pointer;" onclick="showToast('Playing intro video...')"></i>
@@ -414,7 +397,6 @@
                     </div>
                 </div>
 
-                <!-- Reviews -->
                 <div class="content-card">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="section-title mb-0">Reviews</h5>
@@ -434,7 +416,44 @@
         </div>
     </main>
 
-    <!-- JS -->
+    <div class="modal fade" id="editTutorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-clevr-dark">Edit Tutor Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-3">
+                    <form id="editTutorForm">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Display Name</label>
+                            <input type="text" class="form-control rounded-3" id="inputTutorName" value="Gita Aulia">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Tagline / Title</label>
+                            <input type="text" class="form-control rounded-3" id="inputTutorTagline" value="Science Wizard">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Location</label>
+                            <input type="text" class="form-control rounded-3" id="inputTutorLocation" value="Jakarta, Indonesia">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">About Me</label>
+                            <textarea class="form-control rounded-3" id="inputTutorAbout" rows="4">Hello! I'm Gita, a passionate Science Wizard. A Pure Physics graduate who believes that science is fun, not scary!</textarea>
+                        </div>
+                        
+                        <button type="button" class="btn bg-clevr-orange text-white fw-bold w-100 py-2 rounded-3 btn-animate" onclick="saveTutorProfile()">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/bootstrap.bundle.min.js"></script>
     <script>
         function showToast(message) {
@@ -451,6 +470,44 @@
             if(confirm("Are you sure you want to log out?")) {
                 window.location.href = "login.html"; 
             }
+        }
+
+        // --- NEW FUNCTION: SAVE TUTOR PROFILE ---
+        function saveTutorProfile() {
+            // 1. Get values from Modal
+            const newName = document.getElementById('inputTutorName').value;
+            const newTagline = document.getElementById('inputTutorTagline').value;
+            const newLocation = document.getElementById('inputTutorLocation').value;
+            const newAbout = document.getElementById('inputTutorAbout').value;
+
+            // 2. Update display
+            // Name
+            if(document.getElementById('tutor-name-display')) {
+                document.getElementById('tutor-name-display').innerText = newName;
+            }
+            if(document.getElementById('nav-name-display')) {
+                document.getElementById('nav-name-display').innerText = newName;
+            }
+            // Tagline
+            if(document.getElementById('tutor-tagline-display')) {
+                document.getElementById('tutor-tagline-display').innerText = newTagline;
+            }
+            // Location
+            if(document.getElementById('tutor-location-display')) {
+                document.getElementById('tutor-location-display').innerText = newLocation;
+            }
+            // About Me
+            if(document.getElementById('tutor-about-display')) {
+                document.getElementById('tutor-about-display').innerText = newAbout;
+            }
+
+            // 3. Hide Modal
+            const modalEl = document.getElementById('editTutorModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            modalInstance.hide();
+
+            // 4. Show Success Toast
+            showToast("Profile updated successfully!");
         }
     </script>
 </body>

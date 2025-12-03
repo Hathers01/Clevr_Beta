@@ -245,7 +245,7 @@
                 <div class="stat-card">
                     <div class="stat-label">Monthly Earnings</div>
                     <div class="stat-value">
-                        150 <i class="fa-solid fa-clover clover-icon-lg ms-2"></i>
+                        <span id="tutorBalanceDisplay">150</span> <i class="fa-solid fa-clover clover-icon-lg ms-2"></i>
                     </div>
                 </div>
             </div>
@@ -329,6 +329,37 @@
 
     <!-- Notification Logic -->
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const BALANCE_KEY = 'tutorBalance';
+            
+            function updateDashboardBalance() {
+                // 1. Ambil saldo dari localStorage
+                let currentBalance = localStorage.getItem(BALANCE_KEY);
+                
+                // 2. Jika belum ada data (pertama kali buka), set default 150
+                if (!currentBalance) {
+                    currentBalance = '150';
+                    localStorage.setItem(BALANCE_KEY, currentBalance);
+                }
+                
+                // 3. Update tampilan di layar
+                const balanceElement = document.getElementById('tutorBalanceDisplay');
+                if (balanceElement) {
+                    balanceElement.innerText = parseInt(currentBalance).toLocaleString();
+                }
+            }
+
+            // Jalankan saat halaman dimuat
+            updateDashboardBalance();
+
+            // Jalankan update otomatis jika data berubah di tab lain (sinkronisasi real-time)
+            window.addEventListener('storage', (event) => {
+                if (event.key === BALANCE_KEY) {
+                    updateDashboardBalance();
+                }
+            });
+        });
+
         let toastTimeout; // Global variable to store timer
 
         function showNotification(message, type = 'success') {

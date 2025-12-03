@@ -294,7 +294,8 @@
                 <!-- Top Up Wallet Section -->
                 <div class="d-flex align-items-center bg-white rounded-pill px-3 py-1 me-4 shadow-sm" style="height: 45px;">
                     <i class="fa-solid fa-clover clover-icon fs-5 me-2"></i>
-                    <span id="wallet-balance" class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
+                    <!-- UPDATED ID: wallet-balance-nav -->
+                    <span id="wallet-balance-nav" class="fw-bold text-clevr-dark me-3" style="font-size: 1.1rem;">1,250</span>
                     <button onclick="window.location.href='topup.html'" class="btn bg-clevr-orange text-clevr-dark rounded-circle p-0 d-flex align-items-center justify-content-center btn-animate" style="width: 28px; height: 28px;" title="Top Up Clovr">
                         <i class="fa-solid fa-plus"></i>
                     </button>
@@ -302,6 +303,7 @@
 
                 <!-- Profile Link -->
                 <div class="d-flex align-items-center profile-section">
+                    <!-- Menggunakan placeholder image jika gambar lokal tidak ada -->
                     <img src="foto/user1.png" alt="Profile" class="rounded-circle me-3 shadow-sm profile-nav-img">
                     <div class="profile-text d-none d-md-block text-start">
                         <div class="fw-bold text-white" id="navName">Hayley Williams</div>
@@ -404,10 +406,11 @@
                     <div class="col-md-4">
                         <div class="stat-card bg-clevr-orange">
                             <div>
-                                <div class="display-6 fw-bold">145</div>
+                                <!-- UPDATED ID: wallet-balance-main -->
+                                <span id="wallet-balance-main" class="display-6 fw-bold">1,250</span>
                                 <div class="small opacity-75 fw-bold mb-1">Clover Balance</div>
-                                <button class="btn-topup">
-                                    <i class="fa-solid fa-plus me-1"></i> Top Up
+                                <button onclick="window.location.href='topup.html'" class="btn-topup">
+                                    <i class="fa-solid fa-plus me-1" ></i> Top Up
                                 </button>
                             </div>
                             <div class="stat-icon-bg">
@@ -535,9 +538,20 @@
         function updateWalletUI() {
             // Ambil saldo dari localStorage, atau default 1250
             const balance = localStorage.getItem('clovrBalance') ? parseInt(localStorage.getItem('clovrBalance')) : 1250;
-            const walletElement = document.getElementById('wallet-balance');
-            if(walletElement) {
-                walletElement.innerText = balance.toLocaleString();
+            
+            // Format angka
+            const formattedBalance = balance.toLocaleString();
+
+            // Update Navbar Balance (Gunakan ID unik)
+            const navWalletElement = document.getElementById('wallet-balance-nav');
+            if(navWalletElement) {
+                navWalletElement.innerText = formattedBalance;
+            }
+
+            // Update Main Body Balance (Gunakan ID unik)
+            const mainWalletElement = document.getElementById('wallet-balance-main');
+            if(mainWalletElement) {
+                mainWalletElement.innerText = formattedBalance;
             }
         }
         // Panggil saat halaman dimuat

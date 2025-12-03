@@ -273,9 +273,14 @@
             position: relative;
         }
         
-        .icon-clover-bg i {
-            color: #16a34a; /* Green */
-            font-size: 2.2rem;
+        .clover-icon-sm {
+            color: #4ade80;
+            font-size: 1rem;
+        }
+
+        .clover-icon-lg {
+            color: #4ade80;
+            font-size: 2rem;
         }
 
         .modal-title-custom {
@@ -400,7 +405,7 @@
                     <div class="bg-white bg-opacity-10 p-3 rounded-4 d-inline-block text-start">
                         <div class="small text-white-50 mb-1">Your Balance</div>
                         <!-- Added ID here for dynamic update -->
-                        <div class="fs-2 fw-bold"><span id="tutorBalanceDisplay">150</span> <i class="fa-solid fa-clover text-warning"></i></div>
+                        <div class="fs-2 fw-bold"><span id="tutorBalanceDisplay">150</span> <i class="fa-solid fa-clover clover-icon-lg"></i></div>
                     </div>
                 </div>
             </div>
@@ -446,7 +451,7 @@
                         </p>
                         <hr class="opacity-10 my-3">
                         <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="reward-pill"><i class="fa-solid fa-clover"></i> 15</div>
+                            <div class="reward-pill"><i class="fa-solid fa-clover clover-icon-sm"></i> 15</div>
                             <button class="btn btn-take px-4 py-2" onclick="showToast('This is a demo task.')">Take Task</button>
                         </div>
                     </div>
@@ -470,7 +475,7 @@
                         </p>
                         <hr class="opacity-10 my-3">
                         <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="reward-pill"><i class="fa-solid fa-clover"></i> 10</div>
+                            <div class="reward-pill"><i class="fa-solid fa-clover clover-icon-sm"></i> 10</div>
                             <button class="btn btn-take px-4 py-2" onclick="showToast('This is a demo task.')">Take Task</button>
                         </div>
                     </div>
@@ -535,7 +540,7 @@
                 <div class="mt-2">
                     <!-- Icon: Clover -->
                     <div class="icon-clover-bg">
-                        <i class="fa-solid fa-clover"></i>
+                        <i class="fa-solid fa-clover clover-icon-lg"></i>
                     </div>
                     
                     <!-- Title -->
@@ -549,7 +554,7 @@
                     <!-- Reward Box -->
                     <div class="reward-box">
                         <div class="reward-amount">
-                            +<span id="modalRewardAmount">15</span> <i class="fa-solid fa-clover"></i>
+                            +<span id="modalRewardAmount">15</span> <i class="fa-solid fa-clover clover-icon-lg"></i>
                         </div>
                     </div>
                     
@@ -693,7 +698,7 @@
 
                         <div class="d-flex justify-content-between align-items-center mt-auto">
                             <div class="reward-pill">
-                                <i class="fa-solid fa-clover"></i> ${task.reward}
+                                <i class="fa-solid fa-clover clover-icon-sm"></i> ${task.reward}
                             </div>
                             <button onclick="acceptTask()" class="btn btn-take px-4 py-2">
                                 Take Task
