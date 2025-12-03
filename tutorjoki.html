@@ -43,23 +43,21 @@
             height: 80px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        
         .nav-link {
             color: white !important;
             font-weight: 600;
             font-size: 1.1rem;
+            margin-right: 1.5rem;
             transition: opacity 0.2s;
-            opacity: 0.7; /* Default transparency for inactive links */
-            white-space: nowrap; /* Prevent text wrapping */
+            text-decoration: none; /* Pastikan tidak ada underline default */
         }
         .nav-link:hover {
-            opacity: 1;
+            opacity: 0.8;
+            text-decoration: none; /* Hilangkan underline saat hover */
         }
-        
-        /* Active Link Style - Modified to remove underline */
         .nav-link.active {
-            opacity: 1 !important;
-            /* border-bottom removed */
+            opacity: 1;
+            font-weight: 700; /* Hanya pertebal font, tanpa underline */
         }
         
         .profile-section img {
@@ -360,39 +358,32 @@
     </div>
 
     <!-- Navbar Layout Berjejer (Inline) -->
-    <nav class="navbar navbar-custom bg-clevr-purple px-4 px-md-5 sticky-top">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
-            <!-- Bagian Kiri: Brand + Menu Navigasi -->
-            <div class="d-flex align-items-center overflow-auto">
-                <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="tutorhome.html">
-                    CLEVR
-                </a>
-                
-                <!-- Menu (Menggunakan d-flex flex-row agar selalu berjejer) -->
-                <ul class="navbar-nav d-flex flex-row gap-4 mb-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="tutorhome.html">Home</a>
-                    </li>
+    <nav class="navbar navbar-expand-lg navbar-custom bg-clevr-orange px-4 px-md-5 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fs-3 fw-bold tracking-wide me-5" href="tutorhome.html">
+                CLEVR
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Updated href to home_tutor.html for navigation simulation -->
+                    <li class="nav-item"><a class="nav-link" href="tutorhome.html">Home</a></li>
                     <li class="nav-item">
                         <a class="nav-link active" href=" ">Task Market</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="tutorschedule.html">My Schedule</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="tutorearnings.html">Earnings & History</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="tutorschedule.html">My Schedule</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tutorearnings.html">Earnings & History</a></li>
                 </ul>
-            </div>
-            
-            <!-- Bagian Kanan: Profil -->
-             <a href="tutorprofile.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
+                <a href="tutorprofile.html" class="d-flex align-items-center profile-section text-decoration-none cursor-pointer">
                     <img src="foto/tutor3.jpeg" alt="Profile" class="rounded-circle me-3 shadow-sm">
                     <div class="profile-text d-none d-md-block">
                         <div class="fw-bold text-white">Gita Aulia</div>
                         <div class="small text-white-50">Tutor</div>
                     </div>
-            </a>
+                </a>
+            </div>
         </div>
     </nav>
 
