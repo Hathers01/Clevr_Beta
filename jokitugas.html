@@ -439,200 +439,170 @@
 
     <script src="js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- KEY FOR LOCALSTORAGE ---
-        const TASK_KEY = 'activeTask';
+    // --- KEY FOR LOCALSTORAGE ---
+    const TASK_KEY = 'activeTask';
+    const BALANCE_KEY = 'clovrBalance';
 
-        // --- 1. INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            updateWalletUI();
-            checkActiveTask(); // Check if there's a saved task on load
-        });
+    // --- 1. INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        updateWalletUI();
+        checkActiveTask(); 
+    });
 
-        // --- 2. WALLET LOGIC ---
-        function updateWalletUI() {
-            const balance = localStorage.getItem('clovrBalance') ? parseInt(localStorage.getItem('clovrBalance')) : 1250;
-            const walletElement = document.getElementById('wallet-balance');
-            if(walletElement) walletElement.innerText = balance.toLocaleString();
-        }
+    // --- 2. WALLET LOGIC ---
+    function updateWalletUI() {
+        const balance = localStorage.getItem(BALANCE_KEY) ? parseInt(localStorage.getItem(BALANCE_KEY)) : 1250;
+        const walletElement = document.getElementById('wallet-balance');
+        if(walletElement) walletElement.innerText = balance.toLocaleString();
+    }
 
-        // --- 3. TASK LOGIC ---
-
-        // Check LocalStorage & Render
-        function checkActiveTask() {
-            const savedTask = localStorage.getItem(TASK_KEY);
-            if (savedTask) {
-                const task = JSON.parse(savedTask);
-                renderTaskUI(task);
-            } else {
-                document.getElementById('postedTasksSection').style.display = 'none';
-            }
-        }
-
-        // Render UI based on Task State
-        function renderTaskUI(task) {
-            // Populate Data
-            document.getElementById('displayTitle').innerText = task.title;
-            document.getElementById('displayReward').innerText = task.reward;
-            
-            // Show Section
-            document.getElementById('postedTasksSection').style.display = 'block';
-
-            // Reset Classes
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            const fill = document.getElementById('progressFill');
-            const alertWait = document.getElementById('alertWaiting');
-            const alertProc = document.getElementById('alertProcess');
-            const alertDone = document.getElementById('alertDone');
-
-            step2.classList.remove('active');
-            step3.classList.remove('active');
-            alertWait.classList.remove('active');
-            alertProc.classList.remove('active');
-            alertDone.classList.remove('active');
-
-            // Handle States
-            if (task.status === 'waiting') {
-                fill.style.width = '0%';
-                alertWait.classList.add('active');
-            } 
-            else if (task.status === 'process') {
-                fill.style.width = '50%'; // This goes to the center of Step 2
-                step2.classList.add('active');
-                alertProc.classList.add('active');
-                if(task.tutorName) {
-                    document.getElementById('tutorNameDisplay').innerText = task.tutorName;
-                }
-            } 
-            else if (task.status === 'done') {
-                fill.style.width = '100%';
-                step2.classList.add('active');
-                step3.classList.add('active');
-                alertDone.classList.add('active');
-            }
-        }
-
-        // Handle Upload Form Submit
-        function handleUpload(e) {
-            e.preventDefault();
-
-            // Get Form Data
-            const title = document.getElementById('judulTugas').value;
-            const subject = document.getElementById('mapel').value; // Save Subject
-            const deadline = document.getElementById('deadline').value; // Save Deadline
-            const description = document.getElementById('deskripsi').value; // Save Instructions (NEW!)
-            const reward = document.getElementById('reward').value;
-
-            // Get User Name from Profile (Navbar)
-            // Select element with class .profile-text and find .fw-bold inside it
-            const studentNameElement = document.querySelector('.profile-text .fw-bold');
-            const studentName = studentNameElement ? studentNameElement.innerText : 'Unknown Student';
-
-            // Create Task Object
-            const newTask = {
-                id: Date.now(),
-                title: title,
-                subject: subject,
-                deadline: deadline,
-                description: description, // Saved to LocalStorage
-                reward: reward,
-                studentName: studentName, // Saved User Name
-                status: 'waiting', // Default status
-                tutorName: null
-            };
-
-            // Save to LocalStorage
-            localStorage.setItem(TASK_KEY, JSON.stringify(newTask));
-
-            // Show Toast & UI
-            showToast("Assignment uploaded successfully! Waiting for help...");
-            renderTaskUI(newTask);
-            
-            // Scroll to view
-            document.getElementById('postedTasksSection').scrollIntoView({ behavior: 'smooth' });
-
-            // Reset Form
-            e.target.reset();
-        }
-
-        // Clear Task (For Demo Purpose)
-        function clearTask() {
-            localStorage.removeItem(TASK_KEY);
-            location.reload();
-        }
-
-        // --- NEW FUNCTION: COMPLETE TASK (Deduct Balance + Modal) ---
-        function completeTask() {
-            // 1. Get Task
-            const savedTask = localStorage.getItem(TASK_KEY);
-            if (!savedTask) return;
+    // --- 3. TASK LOGIC ---
+    function checkActiveTask() {
+        const savedTask = localStorage.getItem(TASK_KEY);
+        if (savedTask) {
             const task = JSON.parse(savedTask);
-            const reward = parseInt(task.reward) || 0;
-
-            // 2. Deduct Balance
-            let currentBalance = parseInt(localStorage.getItem('clovrBalance')) || 1250;
             
-            // Logic to prevent negative balance (optional, but good practice)
-            if (currentBalance >= reward) {
-                currentBalance -= reward;
-                localStorage.setItem('clovrBalance', currentBalance);
-                updateWalletUI(); // Update Navbar immediately
-            } else {
-                // If this were real, we might block it. For demo, we just proceed or warn.
-                console.warn("Balance insufficient technically, but proceeding for demo.");
-                currentBalance = 0; // Or allow negative
-                localStorage.setItem('clovrBalance', currentBalance);
-                updateWalletUI();
+            // CEK OTOMATIS: Jika status DONE tapi belum bayar, potong saldo sekarang
+            if (task.status === 'done' && !task.studentPaid) {
+                processStudentPayment(task);
+                return; // Stop rendering here, reload function after update
             }
 
-            // 3. Update Status
-            changeTaskStatus('done');
-
-            // 4. Show Modal
-            const modal = document.getElementById('paymentModal');
-            modal.style.display = 'flex';
+            renderTaskUI(task);
+        } else {
+            document.getElementById('postedTasksSection').style.display = 'none';
         }
+    }
 
-        // Close Modal
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
+    function renderTaskUI(task) {
+        document.getElementById('displayTitle').innerText = task.title;
+        document.getElementById('displayReward').innerText = task.reward;
+        document.getElementById('postedTasksSection').style.display = 'block';
+
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const fill = document.getElementById('progressFill');
+        const alertWait = document.getElementById('alertWaiting');
+        const alertProc = document.getElementById('alertProcess');
+        const alertDone = document.getElementById('alertDone');
+
+        // Reset
+        [step2, step3, alertWait, alertProc, alertDone].forEach(el => el.classList.remove('active'));
+
+        if (task.status === 'waiting') {
+            fill.style.width = '0%';
+            alertWait.classList.add('active');
+        } 
+        else if (task.status === 'process') {
+            fill.style.width = '50%';
+            step2.classList.add('active');
+            alertProc.classList.add('active');
+            if(task.tutorName) document.getElementById('tutorNameDisplay').innerText = task.tutorName;
+        } 
+        else if (task.status === 'done') {
+            fill.style.width = '100%';
+            step2.classList.add('active');
+            step3.classList.add('active');
+            alertDone.classList.add('active');
         }
+    }
 
-        // --- 4. REAL-TIME INTEGRATION (LISTENER) ---
-        // This listens for changes in LocalStorage made by OTHER pages/tabs
-        window.addEventListener('storage', (event) => {
-            if (event.key === TASK_KEY) {
-                console.log("Storage changed! Updating UI...");
-                checkActiveTask(); // Re-render UI immediately
-            }
-        });
+    // --- 4. UPLOAD LOGIC ---
+    function handleUpload(e) {
+        e.preventDefault();
+        const title = document.getElementById('judulTugas').value;
+        const subject = document.getElementById('mapel').value;
+        const deadline = document.getElementById('deadline').value;
+        const description = document.getElementById('deskripsi').value;
+        const reward = document.getElementById('reward').value;
+        const studentNameElement = document.querySelector('.profile-text .fw-bold');
+        const studentName = studentNameElement ? studentNameElement.innerText : 'Unknown Student';
 
-        // --- 5. DEV HELPER FUNCTION ---
-        // Run this in Console to simulate Tutor accepting the task
-        // Example: changeTaskStatus('process', 'Gita Aulia')
-        window.changeTaskStatus = function(status, tutorName = 'Gita Aulia') {
-            const savedTask = localStorage.getItem(TASK_KEY);
-            if (savedTask) {
-                const task = JSON.parse(savedTask);
-                task.status = status;
-                if(status === 'process') task.tutorName = tutorName;
-                
-                localStorage.setItem(TASK_KEY, JSON.stringify(task));
-                checkActiveTask(); // Manually trigger update for current tab
-                console.log(`Task status updated to: ${status}`);
-            } else {
-                console.warn("No active task found to update.");
-            }
+        const newTask = {
+            id: Date.now(),
+            title: title,
+            subject: subject,
+            deadline: deadline,
+            description: description,
+            reward: reward,
+            studentName: studentName,
+            status: 'waiting',
+            tutorName: null,
+            // FLAG PENTING UNTUK PEMBAYARAN
+            studentPaid: false, 
+            tutorPaid: false 
         };
 
-        // Helper Toast
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            const msg = document.getElementById("toastMessage");
-            msg.innerText = message;
-            toast.className = "custom-toast show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        localStorage.setItem(TASK_KEY, JSON.stringify(newTask));
+        showToast("Assignment uploaded successfully! Waiting for help...");
+        renderTaskUI(newTask);
+        document.getElementById('postedTasksSection').scrollIntoView({ behavior: 'smooth' });
+        e.target.reset();
+    }
+
+    function clearTask() {
+        localStorage.removeItem(TASK_KEY);
+        location.reload();
+    }
+
+    // --- 5. COMPLETE TASK (Triggered by Button) ---
+    function completeTask() {
+        // Hanya mengubah status menjadi done.
+        // Logika pemotongan saldo ditangani oleh checkActiveTask -> processStudentPayment
+        const savedTask = localStorage.getItem(TASK_KEY);
+        if (!savedTask) return;
+        
+        const task = JSON.parse(savedTask);
+        task.status = 'done'; // Set status
+        localStorage.setItem(TASK_KEY, JSON.stringify(task)); // Save
+        
+        checkActiveTask(); // Re-run logic to trigger payment processing
+    }
+
+    // --- 6. LOGIC PEMOTONGAN SALDO (STUDENT) ---
+    function processStudentPayment(task) {
+        let currentBalance = parseInt(localStorage.getItem(BALANCE_KEY)) || 1250;
+        const reward = parseInt(task.reward) || 0;
+
+        // 1. Kurangi Saldo
+        if (currentBalance >= reward) {
+            currentBalance -= reward;
+        } else {
+            currentBalance = 0; 
         }
-    </script>
+
+        // 2. Update Storage Saldo
+        localStorage.setItem(BALANCE_KEY, currentBalance);
+        updateWalletUI();
+
+        // 3. Update Task Flag (Supaya tidak terpotong 2x)
+        task.studentPaid = true;
+        localStorage.setItem(TASK_KEY, JSON.stringify(task));
+
+        // 4. Show Modal & UI Update
+        renderTaskUI(task);
+        const modal = document.getElementById('paymentModal');
+        modal.style.display = 'flex';
+    }
+
+    function closePaymentModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    // --- REAL-TIME SYNC ---
+    window.addEventListener('storage', (event) => {
+        if (event.key === TASK_KEY) {
+            checkActiveTask(); // Otomatis potong saldo jika Tutor klik Done di tempat lain
+        }
+    });
+
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        const msg = document.getElementById("toastMessage");
+        msg.innerText = message;
+        toast.className = "custom-toast show";
+        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+</script>
 </body>
 </html>

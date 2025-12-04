@@ -559,7 +559,7 @@
                     </div>
                     
                     <!-- Button -->
-                    <button type="button" class="btn-modal-action" data-bs-dismiss="modal" onclick="checkAndRenderTasks()">
+                    <button type="button" class="btn-modal-action" data-bs-dismiss="modal">
                         Collect Earnings
                     </button>
                 </div>
@@ -570,238 +570,211 @@
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
     
-    <script>
-        const TASK_KEY = 'activeTask';
-        const BALANCE_KEY = 'tutorBalance';
+<script>
+    const TASK_KEY = 'activeTask';
+    const BALANCE_KEY = 'tutorBalance';
 
-        // --- 1. INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeBalance();
+    // --- 1. INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeBalance();
+        checkAndRenderTasks();
+    });
+
+    // --- 2. SYNC LISTENER ---
+    // Agar jika Student update sesuatu, Tutor langsung melihatnya
+    window.addEventListener('storage', (event) => {
+        if (event.key === TASK_KEY) {
             checkAndRenderTasks();
-        });
+        }
+    });
 
-        // --- 2. LISTENER FOR REAL-TIME UPDATES ---
-        window.addEventListener('storage', (event) => {
-            if (event.key === TASK_KEY) {
-                console.log("Storage changed detected in Tutor View.");
-                checkAndRenderTasks();
-            }
-        });
+    // --- 3. BALANCE LOGIC ---
+    function initializeBalance() {
+        if (!localStorage.getItem(BALANCE_KEY)) {
+            localStorage.setItem(BALANCE_KEY, '150');
+        }
+        updateBalanceDisplay();
+    }
 
-        // --- 3. BALANCE LOGIC ---
-        function initializeBalance() {
-            // Check if balance exists, if not set default 150
-            if (!localStorage.getItem(BALANCE_KEY)) {
-                localStorage.setItem(BALANCE_KEY, '150');
-            }
-            updateBalanceDisplay();
+    function updateBalanceDisplay() {
+        const currentBalance = localStorage.getItem(BALANCE_KEY);
+        const balanceEl = document.getElementById('tutorBalanceDisplay');
+        if (balanceEl) {
+            balanceEl.innerText = parseInt(currentBalance).toLocaleString();
+        }
+    }
+
+    // --- 4. CORE TASK LOGIC (Hanya Menampilkan, Tidak Mengubah Data) ---
+    function checkAndRenderTasks() {
+        const savedTaskStr = localStorage.getItem(TASK_KEY);
+        const workingSection = document.getElementById('workingOnSection');
+        
+        // Bersihkan grid Available Task dari tugas dinamis sebelumnya
+        const existingDynamic = document.getElementById('dynamicTaskCol');
+        if(existingDynamic) existingDynamic.remove();
+
+        if (!savedTaskStr) {
+            workingSection.style.display = 'none';
+            return;
         }
 
-        function updateBalanceDisplay() {
-            const currentBalance = localStorage.getItem(BALANCE_KEY);
-            const balanceEl = document.getElementById('tutorBalanceDisplay');
-            if (balanceEl) {
-                balanceEl.innerText = parseInt(currentBalance).toLocaleString();
-            }
+        const task = JSON.parse(savedTaskStr);
+
+        // Jika status Waiting -> Tampilkan di Market
+        if (task.status === 'waiting') {
+            workingSection.style.display = 'none';
+            renderAvailableCard(task);
+        } 
+        // Jika status Process atau Done -> Tampilkan di Working On
+        else if (task.status === 'process' || task.status === 'done') {
+            renderActiveSection(task);
         }
+    }
 
-        // --- 4. CORE TASK LOGIC ---
-        function checkAndRenderTasks() {
-            const savedTaskStr = localStorage.getItem(TASK_KEY);
-            const workingSection = document.getElementById('workingOnSection');
-            
-            // Default: Remove any previously injected dynamic task from grid
-            const existingDynamic = document.getElementById('dynamicTaskCol');
-            if(existingDynamic) existingDynamic.remove();
+    // --- 5. LOGIC UTAMA: ACCEPT & DONE (Di sini Pembayaran Terjadi) ---
 
-            if (!savedTaskStr) {
-                workingSection.style.display = 'none';
-                return;
-            }
-
+    function acceptTask() {
+        const savedTaskStr = localStorage.getItem(TASK_KEY);
+        if(savedTaskStr) {
             const task = JSON.parse(savedTaskStr);
+            task.status = 'process';
+            task.tutorName = 'Gita Aulia'; // Nama Tutor Hardcoded untuk demo
+            
+            localStorage.setItem(TASK_KEY, JSON.stringify(task));
+            showToast('Task accepted! Moved to "Working On".');
+            checkAndRenderTasks(); 
+        }
+    }
 
-            // LOGIC A: Task is WAITING -> Show in Available Tasks
-            if (task.status === 'waiting') {
-                workingSection.style.display = 'none';
-                renderAvailableCard(task);
-            } 
-            // LOGIC B: Task is PROCESS or DONE -> Show in Working On Section
-            else if (task.status === 'process' || task.status === 'done') {
-                renderActiveSection(task);
-            }
+    function markAsDone() {
+        const savedTaskStr = localStorage.getItem(TASK_KEY);
+        if(!savedTaskStr) return;
+
+        const task = JSON.parse(savedTaskStr);
+
+        // -- CEK: Jangan bayar dua kali jika tombol ditekan spam --
+        if (task.status === 'done' && task.tutorPaid) {
+            return; 
         }
 
-        // Render Card in "Available Tasks" List
-        function renderAvailableCard(task) {
-            const grid = document.getElementById('taskGrid');
+        // 1. Update Status
+        task.status = 'done';
+        
+        // 2. Hitung Uang (Hanya jika belum dibayar)
+        if (!task.tutorPaid) {
+            let currentBalance = parseInt(localStorage.getItem(BALANCE_KEY)) || 150;
+            let reward = parseInt(task.reward) || 0;
             
-            const col = document.createElement('div');
-            col.className = 'col-md-6 col-lg-4';
-            col.id = 'dynamicTaskCol'; 
+            // Tambah Saldo
+            let newBalance = currentBalance + reward;
+            localStorage.setItem(BALANCE_KEY, newBalance.toString());
             
-            // 1. Handle Instructions
-            const descriptionText = task.description ? `"${task.description}"` : `"No specific instructions provided."`;
+            // Tandai sudah dibayar
+            task.tutorPaid = true;
 
-            // 2. Handle Subject
-            let badgeClass = 'badge-gen';
-            let subjectText = 'General';
-            if (task.subject === 'math') { badgeClass = 'badge-math'; subjectText = 'Mathematics'; }
-            else if (task.subject === 'eng') { badgeClass = 'badge-eng'; subjectText = 'English'; }
-            else if (task.subject === 'sci') { badgeClass = 'badge-sci'; subjectText = 'Science'; }
-            else if (task.subject === 'prog') { badgeClass = 'badge-prog'; subjectText = 'Programming'; }
+            // Update Tampilan Saldo Langsung
+            updateBalanceDisplay();
 
-            // 3. Handle Student Name
-            const studentName = task.studentName || 'Anonymous Student';
-            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(studentName)}&background=random`;
+            // Setup Modal
+            document.getElementById('modalRewardAmount').innerText = reward;
+            
+            // Tampilkan Modal "Awesome Work"
+            const successModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
+            successModal.show();
+        }
 
-            // 4. Handle Deadline
-            let timeText = "Just Now";
-            if (task.deadline) {
-                const deadlineDate = new Date(task.deadline);
-                const now = new Date();
-                const diffMs = deadlineDate - now;
-                const diffHrs = Math.ceil(diffMs / (1000 * 60 * 60));
-                
-                if (diffMs > 0) {
-                    if (diffHrs < 24) {
-                        timeText = `Ends in ${diffHrs}h`;
-                    } else {
-                        const diffDays = Math.ceil(diffHrs / 24);
-                        timeText = `Ends in ${diffDays}d`;
-                    }
-                } else {
-                    timeText = "Overdue";
-                }
-            }
+        // 3. Simpan Perubahan Tugas ke LocalStorage
+        localStorage.setItem(TASK_KEY, JSON.stringify(task));
 
-            col.innerHTML = `
-                <div class="card task-card p-3 new-task-anim">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between mb-3 align-items-start">
-                            <span class="task-badge ${badgeClass}">${subjectText}</span>
-                            <span class="small text-danger fw-bold"><i class="fa-regular fa-clock me-1"></i> ${timeText}</span>
-                        </div>
-                        
-                        <h5 class="fw-bold text-clevr-dark mb-2">${task.title}</h5>
-                        
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="${avatarUrl}" class="rounded-circle me-2" width="25" height="25">
-                            <span class="small text-secondary">Posted by <strong>${studentName}</strong></span>
-                        </div>
+        // 4. Update UI "Working On" menjadi Completed
+        checkAndRenderTasks();
+    }
 
-                        <p class="text-secondary small mb-4 flex-grow-1">
-                            ${descriptionText}
-                        </p>
-                        
-                        <hr class="opacity-10 my-3">
+    // --- RENDER HELPERS (Tampilan HTML) ---
+    
+    function renderAvailableCard(task) {
+        const grid = document.getElementById('taskGrid');
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4';
+        col.id = 'dynamicTaskCol'; 
+        
+        // Setup Badge & Nama
+        let badgeClass = 'badge-gen';
+        if (task.subject === 'math') badgeClass = 'badge-math';
+        else if (task.subject === 'eng') badgeClass = 'badge-eng';
+        else if (task.subject === 'sci') badgeClass = 'badge-sci';
+        else if (task.subject === 'prog') badgeClass = 'badge-prog';
 
-                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="reward-pill">
-                                <i class="fa-solid fa-clover clover-icon-sm"></i> ${task.reward}
-                            </div>
-                            <button onclick="acceptTask()" class="btn btn-take px-4 py-2">
-                                Take Task
-                            </button>
-                        </div>
+        const studentName = task.studentName || 'Anonymous';
+        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(studentName)}&background=random`;
+
+        col.innerHTML = `
+            <div class="card task-card p-3 new-task-anim">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between mb-3 align-items-start">
+                        <span class="task-badge ${badgeClass}">${task.subject || 'General'}</span>
+                        <span class="small text-danger fw-bold"><i class="fa-regular fa-clock me-1"></i> New</span>
+                    </div>
+                    <h5 class="fw-bold text-clevr-dark mb-2">${task.title}</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${avatarUrl}" class="rounded-circle me-2" width="25" height="25">
+                        <span class="small text-secondary">Posted by <strong>${studentName}</strong></span>
+                    </div>
+                    <p class="text-secondary small mb-4 flex-grow-1">"${task.description || 'No details'}"</p>
+                    <hr class="opacity-10 my-3">
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <div class="reward-pill"><i class="fa-solid fa-clover clover-icon-sm"></i> ${task.reward}</div>
+                        <button onclick="acceptTask()" class="btn btn-take px-4 py-2">Take Task</button>
                     </div>
                 </div>
+            </div>
+        `;
+        grid.prepend(col);
+    }
+
+    function renderActiveSection(task) {
+        const workingSection = document.getElementById('workingOnSection');
+        const titleEl = document.getElementById('activeTaskTitle');
+        const studentNameEl = document.getElementById('activeStudentName');
+        const fill = document.getElementById('progressFill');
+        const step3 = document.getElementById('step3');
+        const btns = document.getElementById('actionButtons');
+
+        titleEl.innerText = task.title;
+        studentNameEl.innerText = task.studentName || 'Student';
+        workingSection.style.display = 'block';
+
+        if (task.status === 'process') {
+            fill.style.width = '50%';
+            step3.classList.remove('active');
+            btns.innerHTML = `
+                <button class="btn btn-chat px-4 py-2 me-2" onclick="window.location.href='chat_room.html?role=tutor'">
+                        <i class="fa-regular fa-comment-dots me-2"></i> Chat
+                </button>
+                <button class="btn btn-done px-4 py-2" onclick="markAsDone()">
+                    <i class="fa-solid fa-circle-check me-2"></i> Mark Done
+                </button>
             `;
+        } else if (task.status === 'done') {
+            fill.style.width = '100%';
+            step3.classList.add('active');
             
-            grid.prepend(col);
+            // Tampilan Completed
+            btns.innerHTML = `
+                <div class="text-success fw-bold fs-5">
+                    <i class="fa-solid fa-circle-check me-2"></i> Completed
+                </div>
+            `;
         }
+    }
 
-        // Render "Tasks You Are Working On"
-        function renderActiveSection(task) {
-            const workingSection = document.getElementById('workingOnSection');
-            const titleEl = document.getElementById('activeTaskTitle');
-            const studentNameEl = document.getElementById('activeStudentName');
-            const fill = document.getElementById('progressFill');
-            const step3 = document.getElementById('step3');
-            const btns = document.getElementById('actionButtons');
-
-            // Update Content
-            titleEl.innerText = task.title;
-            studentNameEl.innerText = task.studentName || 'Student';
-
-            workingSection.style.display = 'block';
-
-            // Update Stepper Visuals
-            if (task.status === 'process') {
-                fill.style.width = '50%';
-                step3.classList.remove('active');
-                btns.innerHTML = `
-                    <button class="btn btn-chat px-4 py-2 me-2" onclick="window.location.href='chat_room.html?role=tutor'">
-                            <i class="fa-regular fa-comment-dots me-2"></i> Chat
-                    </button>
-                    <button class="btn btn-done px-4 py-2" onclick="markAsDone()">
-                        <i class="fa-solid fa-circle-check me-2"></i> Mark Done
-                    </button>
-                `;
-            } else if (task.status === 'done') {
-                fill.style.width = '100%';
-                step3.classList.add('active');
-                btns.innerHTML = `
-                    <div class="text-success fw-bold">
-                        <i class="fa-solid fa-check-double me-2"></i> Completed
-                    </div>
-                `;
-            }
-        }
-
-        // --- 5. ACTIONS & PAYMENT LOGIC ---
-
-        function acceptTask() {
-            const savedTaskStr = localStorage.getItem(TASK_KEY);
-            if(savedTaskStr) {
-                const task = JSON.parse(savedTaskStr);
-                
-                // Update Data
-                task.status = 'process';
-                task.tutorName = 'Gita Aulia';
-                
-                localStorage.setItem(TASK_KEY, JSON.stringify(task));
-                
-                showToast('Task accepted! Moved to "Working On" section.');
-                checkAndRenderTasks(); 
-            }
-        }
-
-        function markAsDone() {
-            const savedTaskStr = localStorage.getItem(TASK_KEY);
-            if(savedTaskStr) {
-                const task = JSON.parse(savedTaskStr);
-                
-                // 1. Mark task as done
-                task.status = 'done';
-                localStorage.setItem(TASK_KEY, JSON.stringify(task));
-                
-                // 2. Add Balance Logic
-                let currentBalance = parseInt(localStorage.getItem(BALANCE_KEY));
-                let reward = parseInt(task.reward) || 0; // Fallback if 0
-                
-                let newBalance = currentBalance + reward;
-                localStorage.setItem(BALANCE_KEY, newBalance.toString());
-                
-                // 3. Update UI Balance immediately
-                updateBalanceDisplay();
-
-                // 4. Update Modal Content
-                document.getElementById('modalRewardAmount').innerText = reward;
-
-                // 5. Show Payment Success Modal
-                const successModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
-                successModal.show();
-            }
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            const msg = document.getElementById("toastMessage");
-            msg.innerText = message;
-            toast.className = "custom-toast show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-        }
-    </script>
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        const msg = document.getElementById("toastMessage");
+        msg.innerText = message;
+        toast.className = "custom-toast show";
+        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+</script>
 </body>
 </html>
