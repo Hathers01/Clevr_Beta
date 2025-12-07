@@ -65,7 +65,7 @@
             color: white;
         }
 
-        /* --- 4. About Us Specific Styling (Adapted to match theme) --- */
+        /* --- 4. About Us Specific Styling --- */
         
         /* Hero Section */
         .hero-title {
@@ -83,10 +83,10 @@
             color: #666;
         }
 
-        /* Info Card (Adapted from card-custom logic) */
+        /* Info Card */
         .info-card {
             background: white;
-            border-radius: 1rem; /* Matches pricing card radius */
+            border-radius: 1rem; 
             border: 1px solid #f3f4f6;
             padding: 2.5rem;
             height: 100%;
@@ -109,11 +109,71 @@
             font-size: 1.05rem;
             line-height: 1.7;
             color: #4a4a4a;
-            font-weight: 400; /* Fredoka normal weight */
+            font-weight: 400; 
+        }
+
+        /* --- Team Member Card Styling --- */
+        .team-card {
+            background: white;
+            border-radius: 1.5rem; /* Lebih bulat sesuai gambar */
+            border: none;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03); /* Bayangan halus */
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .team-img-wrapper {
+            width: 100%;
+            max-width: 220px;
+            margin: 0 auto 1.5rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            aspect-ratio: 1/1; /* Membuat gambar persegi */
+            background-color: #f0f0f0;
+        }
+
+        .team-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-name {
+            color: var(--clevr-dark);
+            font-weight: 700;
+            font-size: 1.35rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-role {
+            color: var(--clevr-orange);
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .team-socials a {
+            color: #d1d5db; /* Abu-abu muda */
+            margin: 0 6px;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .team-socials a:hover {
+            color: var(--clevr-purple);
         }
 
         .spacer {
-            height: 50px;
+            height: 80px;
         }
     </style>
 </head>
@@ -129,9 +189,9 @@
             
             <!-- Links -->
             <div class="d-flex align-items-center">
-                <a href="index.html" class="nav-link text-decoration-none">Home</a>
+                <a href="#" class="nav-link text-decoration-none">Home</a>
                 <span class="nav-separator">|</span>
-                <a href="signup.html" class="nav-link text-decoration-none">Sign Up</a>
+                <a href="#" class="nav-link text-decoration-none">Sign Up</a>
             </div>
         </div>
     </nav>
@@ -143,17 +203,20 @@
         <div class="text-center mb-5">
             <h1 class="hero-title">Discover CLEVR</h1>
             <p class="hero-subtitle">
-                We support various payment methods for your convenience when purchasing CLEVR Tokens or other services.
+                Interactive online tutoring exclusively for students who want to unlock their true potential. Achieve success with our fun, adaptive curriculum!
             </p>
         </div>
 
-        <!-- Cards Section -->
-        <div class="row g-4">
+        <!-- Story/Mission/Vision Cards Section -->
+        <div class="row g-4 mb-5">
             
             <!-- Our Story (Full Width) -->
             <div class="col-12">
                 <div class="info-card">
-                    <h3 class="card-title-custom">Our Story</h3>
+                    <div class="d-flex align-items-center mb-3">
+                        <!-- Optional Icon placeholder style matching screenshot if desired, but sticking to text for now based on prev request -->
+                        <h3 class="card-title-custom mb-0">Our Story</h3>
+                    </div>
                     <p class="card-text-custom">
                         CLEVR was founded in 2025 with a simple vision: to make high-quality education accessible to everyone, wherever they are. We believe that every student has unique potential, and our task is to provide the right tools and guidance to unlock it.
                     </p>
@@ -177,6 +240,119 @@
                     <p class="card-text-custom">
                         To become the global leader in virtual tutoring that drives adaptive intelligence and critical thinking.
                     </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PEOPLE BEHIND CLEVR SECTION (New) -->
+        <div class="spacer" style="height: 60px;"></div>
+        
+        <div class="text-center mb-5">
+            <h2 class="hero-title">People Behind CLEVR</h2>
+        </div>
+
+        <div class="row justify-content-center g-4 mb-5">
+            
+            <!-- Team Member 1: Dara Alifa Maulani -->
+            <div class="col-md-6 col-lg-5">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <!-- Placeholder Image -->
+                        <img src="foto/tutor1.png" alt="Dara Alifa Maulani" class="team-img">
+                    </div>
+                    <h4 class="team-name">Dara Alifa Maulani</h4>
+                    <p class="team-role">CHIEF EXECUTIVE OFFICER</p>
+                    <div class="team-socials">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="far fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Member 2: Marvelius Harven -->
+            <div class="col-md-6 col-lg-5">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="foto/tutor2.jpeg" alt="Marvelius Harven" class="team-img">
+                    </div>
+                    <h4 class="team-name">Marvelius Harven</h4>
+                    <p class="team-role">OPERATIONAL MANAGER</p>
+                    <div class="team-socials">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="far fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Member 3: M. Athalladitya -->
+            <div class="col-md-6 col-lg-5">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="foto/tutor4.png" alt="M. Athalladitya" class="team-img">
+                    </div>
+                    <h4 class="team-name">M. Athalladitya</h4>
+                    <p class="team-role">PROGRAMMER</p>
+                    <div class="team-socials">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="far fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Member 4: Gita Aulia Nugroho -->
+            <div class="col-md-6 col-lg-5">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="foto/tutor3.jpeg" alt="Gita Aulia Nugroho" class="team-img">
+                    </div>
+                    <h4 class="team-name">Gita Aulia Nugroho</h4>
+                    <p class="team-role">DESIGNER</p>
+                    <div class="team-socials">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="far fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- SEPARATOR LINE (From pricing.html) -->
+        <hr class="my-5 mx-auto" style="max-width: 1150px; border-top: 2px solid #cbd5e1; opacity: 1;">
+        
+        <!-- Contact Section -->
+        <div class="text-center mx-auto mb-5" style="max-width: 768px;">
+            <h2 class="hero-title">Let's Get In Touch!</h2>
+            <p class="hero-subtitle">
+                Do you have questions, need support, or want to explore collaboration? Contact us via the form below or using our details.
+            </p>
+        </div>
+
+        <!-- Contact Card Area -->
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="info-card p-4 p-md-5">
+                    <h3 class="card-title-custom mb-3" style="font-size: 1.5rem;">Contact Information</h3>
+                    
+                    <!-- Thin divider inside card -->
+                    <hr class="text-secondary opacity-25 mb-4">
+
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <h5 class="fw-bold text-dark mb-1">Phone</h5>
+                            <p class="text-secondary mb-0 fs-5">+62 812-3456-789</p>
+                        </div>
+                        
+                        <div class="col-12">
+                            <h5 class="fw-bold text-dark mb-1">Phone</h5>
+                            <p class="text-secondary mb-0 fs-5">+62 812-3456-789</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
